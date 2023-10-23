@@ -25,47 +25,41 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            margin: 0;
+            /* Remove default margin */
         }
 
         .register-container {
             background: #fff;
             padding: 20px;
             border-radius: 5px;
-            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
-            max-width: 80%;
-            /* Set a maximum width */
-            width: 300px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            /* Adjust the maximum width */
+            width: 100%;
             text-align: center;
             display: flex;
-            /* Center the content horizontally */
             flex-direction: column;
-            /* Center the content vertically */
-        }
-
-        .register-container {
-            background: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            display: inline-block;
-            /* Make the container inline-block */
+            margin: 20px;
+            /* Add some spacing around the container */
         }
 
         .register-container h2 {
             margin-bottom: 20px;
+            font-size: 24px;
+            /* Increase the font size */
         }
 
         .form-group {
             margin-bottom: 20px;
-            width: 100%;
-            /* Make sure the form groups are full width */
         }
 
         .form-group label {
             display: block;
             text-align: left;
             margin-bottom: 5px;
+            font-weight: bold;
+            /* Make labels bold */
         }
 
         .form-group input {
@@ -87,58 +81,165 @@
             padding: 10px 20px;
             border-radius: 3px;
             cursor: pointer;
+            font-weight: bold;
+            /* Make the text bold */
         }
 
         .btn:hover {
             background-color: #0056b3;
         }
 
-        .login-link {
-            margin-top: 10px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            /* Add spacing between the form and the table */
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007BFF;
+            color: #fff;
+        }
+
+        .delete img {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .delete img:hover {
+            filter: brightness(85%);
+            /* Add a hover effect */
+        }
+
+        td a {
+            text-decoration: none;
+        }
+
+        td a:hover {
+            text-decoration: underline;
+            /* Add underline on hover */
+        }
+
+        td a:hover img {
+            filter: brightness(85%);
+            /* Adjust image brightness on hover */
+        }
+
+        .navbar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            margin: 0 10px;
+            color: #007bff;
         }
     </style>
 </head>
 
 <body>
-    <div class="register-container">
-        <h2>Register</h2>
-        <form action="/user/register" method="post">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <div class="form-group">
-                <label for="confirm-password">Confirm Password</label>
-                <input type="password" id="confirm-password" name="confirm-password" required>
-                <p id="password-match-message" style="color: red;"></p>
-            </div>
-            <button type="submit" class="btn">Register</button>
-        </form>
-        <div class="login-link">
-            <p>Already have an account? <a href="/user/login">Login</a></p>
+    <%- include("./partials/navbar.ejs")%>
+
+        <div class="register-container">
+            <h2>Unesi novog klijenta</h2>
+            <form action="/user/register" method="post">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" name="confirm-password" required>
+                    <p id="password-match-message" style="color: red;"></p>
+                </div>
+                <button type="submit" class="btn">Sacuvaj</button>
+            </form>
         </div>
-    </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Klijent</th>
+                    <th>Izbrisi klijenta</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(users.length> 0) { %>
+                    <% var rowNumber=1; %>
+                        <% users.forEach(user=> { %>
+                            <tr>
+                                <td>
+                                    <%= rowNumber %>
+                                </td>
+                                <td>
+                                    <%= user.username %>
+                                </td>
+                                <td>
+                                    <a class="delete" data-doc="<%= user._id %>" href="#">
+                                        <img src="/public/trashcan.svg" alt="Trashcan Icon"></a>
+                                </td>
+                            </tr>
+                            <% rowNumber++; %>
+                                <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="5">Nema klijenata za prikaz!</td>
+                                        </tr>
+                                        <% } %>
+            </tbody>
+        </table>
+        <%- include("./partials/footer.ejs") %>
 
-    <script>
-        const passwordInput = document.getElementById('password');
-        const confirmInput = document.getElementById('confirm-password');
-        const message = document.getElementById('password-match-message');
+            <script>
+                const passwordInput = document.getElementById('password');
+                const confirmInput = document.getElementById('confirm-password');
+                const message = document.getElementById('password-match-message');
 
-        function validatePassword() {
-            if (passwordInput.value !== confirmInput.value) {
-                message.textContent = 'Passwords do not match.';
-            } else {
-                message.textContent = '';
-            }
-        }
+                function validatePassword() {
+                    if (passwordInput.value !== confirmInput.value) {
+                        message.textContent = 'Passwords do not match.';
+                    } else {
+                        message.textContent = '';
+                    }
+                }
 
-        passwordInput.addEventListener('input', validatePassword);
-        confirmInput.addEventListener('input', validatePassword);
-    </script>
+                passwordInput.addEventListener('input', validatePassword);
+                confirmInput.addEventListener('input', validatePassword);
+
+
+
+
+                const deleteButtons = document.querySelectorAll('a.delete');
+
+                deleteButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const docId = button.getAttribute('data-doc');
+                        const endpoint = `/user/${docId}`;
+
+                        fetch(endpoint, {
+                            method: 'DELETE',
+                        })
+                            .then(response => response.json())
+                            .then(data => window.location.href = data.redirect)
+                            .catch(err => console.log(err));
+                    });
+                });
+            </script>
 
 </body>
 

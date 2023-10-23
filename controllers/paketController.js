@@ -1,28 +1,44 @@
 const Paket = require('../models/paket');
 
 const paket_index = (req, res) => {
+    const klijent = req.user.username;
     Paket.find().sort({ createdAt: -1 })
         .then(result => {
-            res.render('unospaketa', { pakets: result, title: 'Lista unetih posiljaka' });
+            res.render('unospaketa', { klijent: klijent, pakets: result, title: `${klijent} lista posiljaka` });
         })
         .catch(err => {
             console.log(err);
         });
-}
+};
 
-const paket_details = (req, res) => {
-    const id = req.params.id;
-    Paket.findById(id)
+const paket_admin = (req, res) => {
+    Paket.find().sort({ createdAt: -1 })
         .then(result => {
-            res.json(result);
+            res.render('adminlista', { pakets: result, title: 'Lista unetih posiljaka' });
         })
-        .catch(err => {
-            console.log(err);
-        });
-}
+};
+
+
+// const paket_details = (req, res) => {
+//     const id = req.params.id;
+//     Paket.findById(id)
+//         .then(result => {
+//             res.json(result);
+//         })
+//         .catch(err => {
+//             console.log(err);
+//         });
+// }
 
 const paket_create_post = (req, res) => {
-    const paket = new Paket(req.body);
+    const combinedData = {
+        imeprezime: req.body.imeprezime,
+        adresa: req.body.adresa,
+        telefon: req.body.telefon,
+        cena: req.body.cena,
+        klijent: req.user.username
+    };
+    const paket = new Paket(combinedData);
     paket.save()
         .then(result => {
             res.redirect('/paket');
@@ -43,19 +59,20 @@ const paket_delete = (req, res) => {
         });
 }
 
-const paket_update = (req, res) => {
-    const id = req.params.id;
-    Paket.findByIdAndUpdate(id, req.body, { new: true })
-        .then(result => {
-            res.json(result);
-        })
-        .catch(err => {
-            console.log(err);
-        });
-}
+// const paket_update = (req, res) => {
+//     const id = req.params.id;
+//     Paket.findByIdAndUpdate(id, req.body, { new: true })
+//         .then(result => {
+//             res.json(result);
+//         })
+//         .catch(err => {
+//             console.log(err);
+//         });
+// }
 
 module.exports = {
     paket_index,
     paket_create_post,
     paket_delete,
+    paket_admin,
 }

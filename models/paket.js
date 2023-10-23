@@ -24,7 +24,8 @@ const paketSchema = new Schema({
     datum: {
         type: Date,
         default: Date.now,
-    }
+    },
+    klijent: String
 });
 
 const Paket = connection.model('Paket', paketSchema);

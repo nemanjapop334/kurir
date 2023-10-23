@@ -57,7 +57,6 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
     res.redirect('/user/login');
 });
-
 app.use('/paket', paketRoutes);
 app.use('/user', userRoutes);
 
