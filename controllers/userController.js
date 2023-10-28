@@ -14,12 +14,13 @@ const user_register_post = (req, res) => {
 
     const salt = saltHash.salt;
     const hash = saltHash.hash;
+    const isAdmin = req.body.isAmin === 'on';
 
     const newUser = new User({
         username: req.body.username,
         hash: hash,
         salt: salt,
-        admin: false,
+        admin: isAdmin,
         ptt: req.body.ptt
     });
 

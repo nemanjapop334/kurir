@@ -166,9 +166,13 @@
                     <input type="password" id="confirm-password" name="confirm-password" required>
                     <p id="password-match-message" style="color: red;"></p>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="ptt-field">
                     <label for="ptt">PTT</label>
-                    <input type="number" id="ptt" name="ptt" required>
+                    <input type="number" id="ptt" name="ptt">
+                </div>
+                <div class="form-group">
+                    <label for="isAdmin">Admin</label>
+                    <input type="checkbox" id="isAdmin" name="isAdmin" onchange="togglePTTField()">
                 </div>
                 <button type="submit" class="btn">Sacuvaj</button>
             </form>
@@ -247,6 +251,17 @@
                         .catch(err => console.log(err));
                 });
             });
+
+            function togglePTTField() {
+                const isAdminCheckbox = document.getElementById('isAdmin');
+                const pttField = document.getElementById('ptt-field');
+
+                if (isAdminCheckbox.checked) {
+                    pttField.style.display = 'none'; // Hide the PTT field
+                } else {
+                    pttField.style.display = 'block'; // Show the PTT field
+                }
+            }
         </script>
 
 </body>
