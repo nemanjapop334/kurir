@@ -6,7 +6,7 @@ var passport = require('passport');
 var crypto = require('crypto');
 var paketRoutes = require('./routes/paketRoutes');
 var userRoutes = require('./routes/userRoutes');
-const connection = require('./dbconnection');
+const connection = require('./lib/dbconnection');
 
 const MongoStore = require('connect-mongo')(session);
 require('dotenv').config();

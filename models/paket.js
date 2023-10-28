@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const connection = require('../dbconnection');
+const connection = require('../lib/dbconnection');
 
 
 
 const paketSchema = new Schema({
+    ptt: Number,
+    klijent: String,
     imeprezime: {
         type: String,
         required: true
@@ -25,7 +27,6 @@ const paketSchema = new Schema({
         type: Date,
         default: Date.now,
     },
-    klijent: String
 });
 
 const Paket = connection.model('Paket', paketSchema);

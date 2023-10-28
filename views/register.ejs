@@ -166,6 +166,10 @@
                     <input type="password" id="confirm-password" name="confirm-password" required>
                     <p id="password-match-message" style="color: red;"></p>
                 </div>
+                <div class="form-group">
+                    <label for="ptt">PTT</label>
+                    <input type="number" id="ptt" name="ptt" required>
+                </div>
                 <button type="submit" class="btn">Sacuvaj</button>
             </form>
         </div>
@@ -174,6 +178,7 @@
                 <tr>
                     <th>#</th>
                     <th>Klijent</th>
+                    <th>PTT</th>
                     <th>Izbrisi klijenta</th>
                 </tr>
             </thead>
@@ -189,6 +194,9 @@
                                     <%= user.username %>
                                 </td>
                                 <td>
+                                    <%= user.ptt %>
+                                </td>
+                                <td>
                                     <a class="delete" data-doc="<%= user._id %>" href="#">
                                         <img src="/public/trashcan.svg" alt="Trashcan Icon"></a>
                                 </td>
@@ -202,44 +210,44 @@
                                         <% } %>
             </tbody>
         </table>
-        <%- include("./partials/footer.ejs") %>
 
-            <script>
-                const passwordInput = document.getElementById('password');
-                const confirmInput = document.getElementById('confirm-password');
-                const message = document.getElementById('password-match-message');
 
-                function validatePassword() {
-                    if (passwordInput.value !== confirmInput.value) {
-                        message.textContent = 'Passwords do not match.';
-                    } else {
-                        message.textContent = '';
-                    }
+        <script>
+            const passwordInput = document.getElementById('password');
+            const confirmInput = document.getElementById('confirm-password');
+            const message = document.getElementById('password-match-message');
+
+            function validatePassword() {
+                if (passwordInput.value !== confirmInput.value) {
+                    message.textContent = 'Passwords do not match.';
+                } else {
+                    message.textContent = '';
                 }
+            }
 
-                passwordInput.addEventListener('input', validatePassword);
-                confirmInput.addEventListener('input', validatePassword);
+            passwordInput.addEventListener('input', validatePassword);
+            confirmInput.addEventListener('input', validatePassword);
 
 
 
 
-                const deleteButtons = document.querySelectorAll('a.delete');
+            const deleteButtons = document.querySelectorAll('a.delete');
 
-                deleteButtons.forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const docId = button.getAttribute('data-doc');
-                        const endpoint = `/user/${docId}`;
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const docId = button.getAttribute('data-doc');
+                    const endpoint = `/user/${docId}`;
 
-                        fetch(endpoint, {
-                            method: 'DELETE',
-                        })
-                            .then(response => response.json())
-                            .then(data => window.location.href = data.redirect)
-                            .catch(err => console.log(err));
-                    });
+                    fetch(endpoint, {
+                        method: 'DELETE',
+                    })
+                        .then(response => response.json())
+                        .then(data => window.location.href = data.redirect)
+                        .catch(err => console.log(err));
                 });
-            </script>
+            });
+        </script>
 
 </body>
 

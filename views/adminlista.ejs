@@ -96,34 +96,19 @@
 
 <body>
     <%- include("./partials/navbar.ejs")%>
-
-        <form action="/paket" method="POST">
-            <label for="imeprezime">Ime i Prezime:</label>
-            <input type="text" id="imeprezime" name="imeprezime"><br>
-
-            <label for="adresa">Adresa:</label>
-            <input type="text" id="adresa" name="adresa"><br>
-
-            <label for="telefon">Telefon:</label>
-            <input type="text" id="telefon" name="telefon"><br>
-
-            <label for="cena">Cena:</label>
-            <input type="number" id="cena" name="cena"><br>
-
-            <input type="submit" value="Submit">
-        </form>
-
         <h2>Lista posiljaka</h2>
+        <p><a href="/paket/deleteall">Izbrisi listu</a></p>
 
         <table>
             <thead>
                 <tr>
                     <th>#</th>
                     <th>Klijent</th>
-                    <th>Ime i Prezime</th>
                     <th>Adresa</th>
                     <th>Telefon</th>
                     <th>Cena</th>
+                    <th>PTT</th>
+                    <th>Datum</th>
                     <th></th>
                 </tr>
             </thead>
@@ -139,9 +124,6 @@
                                     <%= paket.klijent %>
                                 </td>
                                 <td>
-                                    <%= paket.imeprezime %>
-                                </td>
-                                <td>
                                     <%= paket.adresa %>
                                 </td>
                                 <td>
@@ -149,6 +131,12 @@
                                 </td>
                                 <td>
                                     <%= paket.cena %>
+                                </td>
+                                <td>
+                                    <%= paket.ptt %>
+                                </td>
+                                <td>
+                                    <%= new Date(paket.datum).toLocaleDateString('sr-RS') %>
                                 </td>
                                 <td>
                                     <a class="delete" data-doc="<%= paket._id %>" href="#">
@@ -180,6 +168,29 @@
                         .then(data => window.location.href = data.redirect)
                         .catch(err => console.log(err));
                 });
+            });
+
+            const tableBody = document.querySelector('tbody');
+            const rows = Array.from(tableBody.querySelectorAll('tr'));
+
+            // Sort rows by paket.klijent, and then by paket.adresa
+            rows.sort((a, b) => {
+                const klijentA = a.querySelectorAll('td')[1].textContent.toLowerCase();
+                const klijentB = b.querySelectorAll('td')[1].textContent.toLowerCase();
+                const adresaA = a.querySelectorAll('td')[3].textContent.toLowerCase();
+                const adresaB = b.querySelectorAll('td')[3].textContent.toLowerCase();
+
+                if (klijentA !== klijentB) {
+                    return klijentA.localeCompare(klijentB);
+                } else {
+                    return adresaA.localeCompare(adresaB);
+                }
+            });
+
+            // Reorder the rows in the table based on the sorted rows
+            rows.forEach((row, index) => {
+                tableBody.appendChild(row);
+                row.querySelector('td').textContent = index + 1;
             });
         </script>
         <%- include("./partials/footer.ejs") %>

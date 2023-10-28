@@ -9,16 +9,17 @@
   "author": "Nemanja Popovcevic",
   "license": "ISC",
   "dependencies": {
-    "ejs": "^3.1.2",
-    "express": "^4.17.1",
-    "lodash": "^4.17.15",
-    "mongoose": "^5.9.10",
-    "morgan": "^1.10.0",
     "base64url": "^3.0.1",
     "connect-mongo": "^3.1.2",
     "dotenv": "^8.2.0",
+    "ejs": "^3.1.2",
+    "exceljs": "^4.4.0",
+    "express": "^4.17.1",
     "express-session": "^1.17.0",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
+    "mongoose": "^5.9.10",
+    "morgan": "^1.10.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0"
   }

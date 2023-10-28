@@ -1,6 +1,6 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const connection = require('../dbconnection');
+const connection = require('../lib/dbconnection');
 const User = require('../models/user');
 const validPassword = require('../lib/passwordUtils').validPassword;
 

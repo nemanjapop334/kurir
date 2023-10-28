@@ -2,7 +2,7 @@ const Paket = require('../models/paket');
 
 const paket_index = (req, res) => {
     const klijent = req.user.username;
-    Paket.find().sort({ createdAt: -1 })
+    Paket.find()
         .then(result => {
             res.render('unospaketa', { klijent: klijent, pakets: result, title: `${klijent} lista posiljaka` });
         })
@@ -12,31 +12,21 @@ const paket_index = (req, res) => {
 };
 
 const paket_admin = (req, res) => {
-    Paket.find().sort({ createdAt: -1 })
+    Paket.find()
         .then(result => {
-            res.render('adminlista', { pakets: result, title: 'Lista unetih posiljaka' });
+            res.render('adminlista', { pakets: result, title: 'Lista posiljaka' });
         })
 };
 
 
-// const paket_details = (req, res) => {
-//     const id = req.params.id;
-//     Paket.findById(id)
-//         .then(result => {
-//             res.json(result);
-//         })
-//         .catch(err => {
-//             console.log(err);
-//         });
-// }
-
 const paket_create_post = (req, res) => {
     const combinedData = {
+        klijent: req.user.username,
         imeprezime: req.body.imeprezime,
         adresa: req.body.adresa,
         telefon: req.body.telefon,
         cena: req.body.cena,
-        klijent: req.user.username
+        ptt: req.user.ptt,
     };
     const paket = new Paket(combinedData);
     paket.save()
@@ -52,27 +42,27 @@ const paket_delete = (req, res) => {
     const id = req.params.id;
     Paket.findByIdAndDelete(id)
         .then(result => {
-            res.json({ redirect: '/paket' });
+            res.json({ redirect: '/paket/admin' });
         })
         .catch(err => {
             console.log(err);
         });
 }
 
-// const paket_update = (req, res) => {
-//     const id = req.params.id;
-//     Paket.findByIdAndUpdate(id, req.body, { new: true })
-//         .then(result => {
-//             res.json(result);
-//         })
-//         .catch(err => {
-//             console.log(err);
-//         });
-// }
-
+const paket_delete_all = async (req, res) => {
+    try {
+        const result = await Paket.deleteMany({});
+        console.log(`Deleted ${result.deletedCount} documents from the "pakets" collection.`);
+        res.redirect('/paket/admin');
+    } catch (err) {
+        console.error('Error deleting data from the "pakets" collection:', error);
+        res.status(500).send('An error occurred while deleting data from the "pakets" collection.');
+    }
+}
 module.exports = {
     paket_index,
     paket_create_post,
     paket_delete,
     paket_admin,
+    paket_delete_all,
 }
