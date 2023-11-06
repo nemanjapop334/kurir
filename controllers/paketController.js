@@ -2,7 +2,7 @@ const Paket = require('../models/paket');
 
 const paket_index = (req, res) => {
     const klijent = req.user.username;
-    Paket.find()
+    Paket.find({ klijent: klijent })
         .then(result => {
             res.render('unospaketa', { klijent: klijent, pakets: result, title: `${klijent} lista posiljaka` });
         })

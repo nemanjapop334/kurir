@@ -131,46 +131,45 @@
             </tr>
         </thead>
         <tbody>
-            <% const userPackages=pakets.filter(paket=> paket.klijent === klijent); %>
-                <% if(userPackages.length> 0) { %>
-                    <% var rowNumber=1; %>
-                        <% userPackages.forEach(paket=> { %>
-                            <tr>
-                                <td>
-                                    <%= rowNumber %>
-                                </td>
-                                <td>
-                                    <%= paket.imeprezime %>
-                                </td>
-                                <td>
-                                    <%= paket.adresa %>
-                                </td>
-                                <td>
-                                    <%= paket.telefon %>
-                                </td>
-                                <td>
-                                    <%= paket.cena %>
-                                </td>
-                                <td>
-                                    <%= paket.ptt %>
-                                </td>
-                                <td>
-                                    <%= new Date(paket.datum).toLocaleDateString('sr-RS') %>
-                                        <%= paket.datum.toLocaleTimeString('sr-RS') %>
-                                </td>
-                                </td>
-                                <td>
-                                    <a class="delete" data-doc="<%= paket._id %>" href="#">
-                                        <img src="/public/trashcan.svg" alt="Trashcan Icon"></a>
-                                </td>
-                            </tr>
-                            <% rowNumber++; %>
-                                <% }); %>
-                                    <% } else { %>
-                                        <tr>
-                                            <td colspan="5">Nema unetih posiljaka za prikaz</td>
-                                        </tr>
-                                        <% } %>
+            <% if(pakets.length> 0) { %>
+                <% var rowNumber=1; %>
+                    <% pakets.forEach(paket=> { %>
+                        <tr>
+                            <td>
+                                <%= rowNumber %>
+                            </td>
+                            <td>
+                                <%= paket.imeprezime %>
+                            </td>
+                            <td>
+                                <%= paket.adresa %>
+                            </td>
+                            <td>
+                                <%= paket.telefon %>
+                            </td>
+                            <td>
+                                <%= paket.cena %>
+                            </td>
+                            <td>
+                                <%= paket.ptt %>
+                            </td>
+                            <td>
+                                <%= new Date(paket.datum).toLocaleDateString('sr-RS') %>
+                                    <%= paket.datum.toLocaleTimeString('sr-RS') %>
+                            </td>
+                            </td>
+                            <td>
+                                <a class="delete" data-doc="<%= paket._id %>" href="#">
+                                    <img src="/public/trashcan.svg" alt="Trashcan Icon"></a>
+                            </td>
+                        </tr>
+                        <% rowNumber++; %>
+                            <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="5">Nema unetih posiljaka za prikaz</td>
+                                    </tr>
+                                    <% } %>
         </tbody>
     </table>
     <script>
