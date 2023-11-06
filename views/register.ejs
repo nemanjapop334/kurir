@@ -168,11 +168,15 @@
                 </div>
                 <div class="form-group" id="ptt-field">
                     <label for="ptt">PTT</label>
-                    <input type="number" id="ptt" name="ptt">
+                    <input type="number" id="ptt" name="ptt" required>
                 </div>
                 <div class="form-group">
-                    <label for="isAdmin">Admin</label>
-                    <input type="checkbox" id="isAdmin" name="isAdmin" onchange="togglePTTField()">
+                    <label for="role">Role</label>
+                    <select id="role" name="role">
+                        <option value="klijent">Klijent</option>
+                        <option value="vozac">Vozac</option>
+                        <option value="admin">Admin</option>
+                    </select>
                 </div>
                 <button type="submit" class="btn">Sacuvaj</button>
             </form>
@@ -252,16 +256,27 @@
                 });
             });
 
-            function togglePTTField() {
-                const isAdminCheckbox = document.getElementById('isAdmin');
-                const pttField = document.getElementById('ptt-field');
 
-                if (isAdminCheckbox.checked) {
-                    pttField.style.display = 'none'; // Hide the PTT field
+
+            const roleSelect = document.getElementById('role');
+            const pttInput = document.getElementById('ptt');
+
+            function togglePTTField() {
+                const selectedRole = roleSelect.value;
+
+                if (selectedRole === 'klijent') {
+                    pttInput.required = true; // Keep the 'required' attribute for "klijent"
+                    pttInput.style.display = 'block'; // Show the PTT field for "klijent"
                 } else {
-                    pttField.style.display = 'block'; // Show the PTT field
+                    pttInput.required = false; // Remove the 'required' attribute for other roles
+                    pttInput.style.display = 'none'; // Hide the PTT field for other roles
                 }
             }
+
+            // Initially set the 'required' attribute based on the default selected role
+            togglePTTField();
+
+            roleSelect.addEventListener('change', togglePTTField);
         </script>
 
 </body>

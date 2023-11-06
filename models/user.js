@@ -8,7 +8,10 @@ const UserSchema = new mongoose.Schema({
     },
     hash: String,
     salt: String,
-    admin: Boolean,
+    role: {
+        type: String,
+        required: true
+    },
     ptt: Number,
 });
 
