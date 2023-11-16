@@ -64,7 +64,7 @@ const user_change_password_post = (req, res) => {
             } else {
                 // Handle incorrect current password error
                 error = 'current-password';
-                throw new Error('Incorrect current password');
+                throw new Error('Netacan unos trenutne sifre');
             }
         })
         .then(() => {
@@ -108,7 +108,8 @@ const user_login_get = (req, res) => {
             res.redirect('/paket'); // Redirect to '/paket' if already logged in
         }
     } else {
-        res.render('login', { title: 'Login' });
+        const errorMessage = req.flash('error')[0];
+        res.render('login', { title: 'Login', errorMessage });
     }
 };
 
