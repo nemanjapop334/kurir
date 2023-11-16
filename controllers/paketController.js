@@ -4,7 +4,7 @@ const paket_index = (req, res) => {
     const klijent = req.user.username;
     Paket.find({ klijent: klijent })
         .then(result => {
-            res.render('unospaketa', { klijent: klijent, pakets: result, title: `${klijent} lista posiljaka` });
+            res.render('unospaketa', { pakets: result, title: `${klijent} lista posiljaka`, userRole: req.user.role });
         })
         .catch(err => {
             console.log(err);
@@ -14,7 +14,7 @@ const paket_index = (req, res) => {
 const paket_admin = (req, res) => {
     Paket.find()
         .then(result => {
-            res.render('adminlista', { pakets: result, title: 'Lista posiljaka' });
+            res.render('adminlista', { pakets: result, title: 'Lista posiljaka', userRole: req.user.role });
         })
 };
 

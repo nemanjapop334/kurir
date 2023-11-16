@@ -90,7 +90,7 @@
         }
 
         table {
-            width: 100%;
+            width: 200%;
             border-collapse: collapse;
             margin-top: 20px;
             /* Add spacing between the form and the table */
@@ -134,7 +134,7 @@
         }
 
         .navbar {
-            position: absolute;
+            position: fixed;
             top: 20px;
             right: 20px;
         }
@@ -144,102 +144,115 @@
             margin: 0 10px;
             color: #007bff;
         }
+
+        .page-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
     </style>
 </head>
 
 <body>
     <%- include("./partials/navbar.ejs")%>
-
-        <div class="register-container">
-            <h2>Unesi novog klijenta</h2>
-            <form action="/user/register" method="post">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <div class="form-group">
-                    <label for="confirm-password">Confirm Password</label>
-                    <input type="password" id="confirm-password" name="confirm-password" required>
-                    <p id="password-match-message" style="color: red;"></p>
-                </div>
-                <div class="form-group" id="ptt-field">
-                    <div id="ptt-inner">
-                        <label for="ptt">PTT</label>
-                        <input type="number" id="ptt" name="ptt" required>
+        <div class="page-container">
+            <div class="register-container">
+                <h2>Registruj korisnika</h2>
+                <form action="/user/register" method="post">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="role">Role</label>
-                    <select id="role" name="role">
-                        <option value="klijent">Klijent</option>
-                        <option value="vozac">Vozac</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn">Sacuvaj</button>
-            </form>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" name="confirm-password" required>
+                        <p id="password-match-message" style="color: red;"></p>
+                    </div>
+                    <div class="form-group" id="ptt-field">
+                        <div id="ptt-inner">
+                            <label for="ptt">PTT</label>
+                            <input type="number" id="ptt" name="ptt" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select id="role" name="role">
+                            <option value="klijent">Klijent</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">Sacuvaj</button>
+                </form>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Korisnik</th>
+                        <th>PTT</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if(users.length> 0) { %>
+                        <% var rowNumber=1; %>
+                            <% users.forEach(user=> { %>
+                                <tr>
+                                    <td>
+                                        <%= rowNumber %>
+                                    </td>
+                                    <td>
+                                        <%= user.username %>(<%= user.role %>)
+                                    </td>
+                                    <td>
+                                        <%= user.ptt %>
+                                    </td>
+                                    <td>
+                                        <a class="delete" data-doc="<%= user._id %>" href="#">
+                                            <img src="/public/trashcan.svg" alt="Trashcan Icon"></a>
+                                    </td>
+                                </tr>
+                                <% rowNumber++; %>
+                                    <% }); %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="5">Nema klijenata za prikaz!</td>
+                                            </tr>
+                                            <% } %>
+                </tbody>
+            </table>
         </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Klijent</th>
-                    <th>PTT</th>
-                    <th>Izbrisi klijenta</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% if(users.length> 0) { %>
-                    <% var rowNumber=1; %>
-                        <% users.forEach(user=> { %>
-                            <tr>
-                                <td>
-                                    <%= rowNumber %>
-                                </td>
-                                <td>
-                                    <%= user.username %>
-                                </td>
-                                <td>
-                                    <%= user.ptt %>
-                                </td>
-                                <td>
-                                    <a class="delete" data-doc="<%= user._id %>" href="#">
-                                        <img src="/public/trashcan.svg" alt="Trashcan Icon"></a>
-                                </td>
-                            </tr>
-                            <% rowNumber++; %>
-                                <% }); %>
-                                    <% } else { %>
-                                        <tr>
-                                            <td colspan="5">Nema klijenata za prikaz!</td>
-                                        </tr>
-                                        <% } %>
-            </tbody>
-        </table>
 
 
         <script>
             const passwordInput = document.getElementById('password');
             const confirmInput = document.getElementById('confirm-password');
             const message = document.getElementById('password-match-message');
+            const form = document.querySelector('form');
 
             function validatePassword() {
                 if (passwordInput.value !== confirmInput.value) {
                     message.textContent = 'Passwords do not match.';
+                    form.addEventListener('submit', preventSubmit);
                 } else {
                     message.textContent = '';
+                    form.removeEventListener('submit', preventSubmit);
                 }
+            }
+
+            function preventSubmit(event) {
+                event.preventDefault();
+                message.textContent = 'Passwords do not match. Please make sure your passwords match.';
             }
 
             passwordInput.addEventListener('input', validatePassword);
             confirmInput.addEventListener('input', validatePassword);
-
-
-
 
             const deleteButtons = document.querySelectorAll('a.delete');
 

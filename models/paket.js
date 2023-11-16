@@ -5,7 +5,6 @@ const connection = require('../lib/dbconnection');
 
 
 const paketSchema = new Schema({
-    ptt: Number,
     klijent: String,
     imeprezime: {
         type: String,
@@ -27,6 +26,7 @@ const paketSchema = new Schema({
         type: Date,
         default: Date.now,
     },
+    ptt: Number,
 });
 
 const Paket = connection.model('Paket', paketSchema);

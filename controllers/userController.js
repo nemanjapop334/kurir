@@ -1,5 +1,7 @@
 const User = require('../models/user');
 const genPassword = require('../lib/passwordUtils').genPassword;
+const validPassword = require('../lib/passwordUtils').validPassword;
+
 
 const user_login_post = (req, res) => {
     if (req.user.role === 'admin') {
@@ -10,6 +12,7 @@ const user_login_post = (req, res) => {
 };
 
 const user_register_post = (req, res) => {
+
     const saltHash = genPassword(req.body.password);
 
     const salt = saltHash.salt;
@@ -32,6 +35,49 @@ const user_register_post = (req, res) => {
     res.redirect('/user/register');
 };
 
+const user_change_password_post = (req, res) => {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+
+    // Initialize the error variable
+    let error = null;
+
+    // Retrieve the user from the database using the authenticated user's ID
+    User.findById(req.user.id)
+        .then((user) => {
+            // Validate current password
+            const isPasswordValid = validPassword(currentPassword, user.hash, user.salt);
+
+            if (isPasswordValid) {
+                // Validate new password and confirm password
+                if (newPassword === confirmPassword) {
+                    // Hash the new password before storing it in the database
+                    const { hash, salt } = genPassword(newPassword);
+                    // Update user's password in the database
+                    user.hash = hash;
+                    user.salt = salt;
+                    return user.save();
+                } else {
+                    // Handle incorrect new password error
+                    error = 'new-password';
+                    throw new Error('New passwords do not match');
+                }
+            } else {
+                // Handle incorrect current password error
+                error = 'current-password';
+                throw new Error('Incorrect current password');
+            }
+        })
+        .then(() => {
+            // Password change was successful, redirect to login
+            res.redirect('/user/login');
+        })
+        .catch((error) => {
+            console.error('Error changing password:', error);
+            res.render('changepassword', { title: 'Promeni sifru', error: error.message, userRole: req.user.role });
+        });
+};
+
+
 const user_delete = (req, res) => {
     const id = req.params.id;
     User.findByIdAndDelete(id)
@@ -46,7 +92,7 @@ const user_delete = (req, res) => {
 const user_register_get = (req, res) => {
     User.find().sort({ createdAt: -1 })
         .then(result => {
-            res.render('register', { users: result, title: 'Klijenti' });
+            res.render('register', { users: result, title: 'Klijenti', userRole: req.user.role });
         })
         .catch(err => {
             console.log(err);
@@ -66,10 +112,18 @@ const user_login_get = (req, res) => {
     }
 };
 
+const user_change_password_get = (req, res) => {
+    // Ensure that the error variable is defined (even if it's null)
+    const error = req.flash('error')[0] || null;
+    res.render('changepassword', { title: 'Promeni sifru', error, userRole: req.user.role });
+};
+
 module.exports = {
     user_login_post,
     user_register_post,
+    user_change_password_post,
     user_delete,
     user_register_get,
-    user_login_get
+    user_login_get,
+    user_change_password_get
 }

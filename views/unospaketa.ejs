@@ -95,118 +95,116 @@
 
 
 <body>
-    <div class="navbar">
-        <a href="/user/logout">Logout</a>
-    </div>
+    <%- include("./partials/navbar.ejs")%>
 
-    <form action="/paket" method="POST">
-        <label for="imeprezime">Ime i Prezime:</label>
-        <input type="text" id="imeprezime" name="imeprezime" required><br>
+        <form action="/paket" method="POST">
+            <label for="imeprezime">Ime i Prezime:</label>
+            <input type="text" id="imeprezime" name="imeprezime" required><br>
 
-        <label for="adresa">Adresa:</label>
-        <input type="text" id="adresa" name="adresa" required><br>
+            <label for="adresa">Adresa:</label>
+            <input type="text" id="adresa" name="adresa" required><br>
 
-        <label for="telefon">Telefon:</label>
-        <input type="text" id="telefon" name="telefon" required><br>
+            <label for="telefon">Telefon:</label>
+            <input type="text" id="telefon" name="telefon" required><br>
 
-        <label for="cena">Cena:</label>
-        <input type="number" id="cena" name="cena" required><br>
+            <label for="cena">Cena:</label>
+            <input type="number" id="cena" name="cena" required><br>
 
-        <input type="submit" value="Unesi">
-    </form>
+            <input type="submit" value="Unesi">
+        </form>
 
-    <h2>Lista posiljaka</h2>
+        <h2>Lista posiljaka</h2>
 
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Ime i Prezime</th>
-                <th>Adresa</th>
-                <th>Telefon</th>
-                <th>Cena</th>
-                <th>PTT</th>
-                <th>Datum i vreme</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <% if(pakets.length> 0) { %>
-                <% var rowNumber=1; %>
-                    <% pakets.forEach(paket=> { %>
-                        <tr>
-                            <td>
-                                <%= rowNumber %>
-                            </td>
-                            <td>
-                                <%= paket.imeprezime %>
-                            </td>
-                            <td>
-                                <%= paket.adresa %>
-                            </td>
-                            <td>
-                                <%= paket.telefon %>
-                            </td>
-                            <td>
-                                <%= paket.cena %>
-                            </td>
-                            <td>
-                                <%= paket.ptt %>
-                            </td>
-                            <td>
-                                <%= new Date(paket.datum).toLocaleDateString('sr-RS') %>
-                                    <%= paket.datum.toLocaleTimeString('sr-RS') %>
-                            </td>
-                            </td>
-                            <td>
-                                <a class="delete" data-doc="<%= paket._id %>" href="#">
-                                    <img src="/public/trashcan.svg" alt="Trashcan Icon"></a>
-                            </td>
-                        </tr>
-                        <% rowNumber++; %>
-                            <% }); %>
-                                <% } else { %>
-                                    <tr>
-                                        <td colspan="5">Nema unetih posiljaka za prikaz</td>
-                                    </tr>
-                                    <% } %>
-        </tbody>
-    </table>
-    <script>
-        const deleteButtons = document.querySelectorAll('a.delete');
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Ime i Prezime</th>
+                    <th>Adresa</th>
+                    <th>Telefon</th>
+                    <th>Cena</th>
+                    <th>PTT</th>
+                    <th>Datum i vreme</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(pakets.length> 0) { %>
+                    <% var rowNumber=1; %>
+                        <% pakets.forEach(paket=> { %>
+                            <tr>
+                                <td>
+                                    <%= rowNumber %>
+                                </td>
+                                <td>
+                                    <%= paket.imeprezime %>
+                                </td>
+                                <td>
+                                    <%= paket.adresa %>
+                                </td>
+                                <td>
+                                    <%= paket.telefon %>
+                                </td>
+                                <td>
+                                    <%= paket.cena %>
+                                </td>
+                                <td>
+                                    <%= paket.ptt %>
+                                </td>
+                                <td>
+                                    <%= new Date(paket.datum).toLocaleDateString('sr-RS') %>
+                                        <%= paket.datum.toLocaleTimeString('sr-RS') %>
+                                </td>
+                                </td>
+                                <td>
+                                    <a class="delete" data-doc="<%= paket._id %>" href="#">
+                                        <img src="/public/trashcan.svg" alt="Trashcan Icon"></a>
+                                </td>
+                            </tr>
+                            <% rowNumber++; %>
+                                <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="5">Nema unetih posiljaka za prikaz</td>
+                                        </tr>
+                                        <% } %>
+            </tbody>
+        </table>
+        <script>
+            const deleteButtons = document.querySelectorAll('a.delete');
 
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                const docId = button.getAttribute('data-doc');
-                const endpoint = `/paket/${docId}`;
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const docId = button.getAttribute('data-doc');
+                    const endpoint = `/paket/${docId}`;
 
-                fetch(endpoint, {
-                    method: 'DELETE',
-                })
-                    .then(response => response.json())
-                    .then(data => window.location.href = data.redirect)
-                    .catch(err => console.log(err));
+                    fetch(endpoint, {
+                        method: 'DELETE',
+                    })
+                        .then(response => response.json())
+                        .then(data => window.location.href = data.redirect)
+                        .catch(err => console.log(err));
+                });
             });
-        });
 
-        // Sort userPackages by paket.adresa in ascending order
-        const userPackages = Array.from(document.querySelectorAll('tr')).slice(1); // Skip the header row
-        userPackages.sort((a, b) => {
-            const adresaA = a.querySelectorAll('td')[2].textContent.toLowerCase();
-            const adresaB = b.querySelectorAll('td')[2].textContent.toLowerCase();
-            return adresaA.localeCompare(adresaB);
-        });
+            // Sort userPackages by paket.adresa in ascending order
+            const userPackages = Array.from(document.querySelectorAll('tr')).slice(1); // Skip the header row
+            userPackages.sort((a, b) => {
+                const adresaA = a.querySelectorAll('td')[2].textContent.toLowerCase();
+                const adresaB = b.querySelectorAll('td')[2].textContent.toLowerCase();
+                return adresaA.localeCompare(adresaB);
+            });
 
-        // Reorder the rows in the table based on the sorted userPackages
-        const tableBody = document.querySelector('tbody');
-        userPackages.forEach((packageRow, index) => {
-            tableBody.appendChild(packageRow);
-            packageRow.querySelector('td').textContent = index + 1;
-        });
+            // Reorder the rows in the table based on the sorted userPackages
+            const tableBody = document.querySelector('tbody');
+            userPackages.forEach((packageRow, index) => {
+                tableBody.appendChild(packageRow);
+                packageRow.querySelector('td').textContent = index + 1;
+            });
 
-    </script>
-    <%- include("./partials/footer.ejs") %>
+        </script>
+        <%- include("./partials/footer.ejs") %>
 </body>
 
 </html>

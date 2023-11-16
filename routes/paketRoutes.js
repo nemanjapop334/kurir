@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/', isAuth, paketController.paket_index);
 router.get('/admin', isAdmin, paketController.paket_admin);
-router.get('/export-to-excel', isAdmin, exportToExcel);
+router.get('/export-to-excel', isAuth, exportToExcel);
 router.get('/deleteall', isAdmin, paketController.paket_delete_all);
 
 router.post('/', paketController.paket_create_post);
