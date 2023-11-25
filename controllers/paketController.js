@@ -2,12 +2,13 @@ const Paket = require('../models/paket');
 
 const paket_index = (req, res) => {
     const klijent = req.user.username;
-    Paket.find({ klijent: klijent })
+    Paket.find({ klijent: klijent }).sort({ createdAt: -1 })
         .then(result => {
             res.render('unospaketa', { pakets: result, title: `${klijent} lista posiljaka`, userRole: req.user.role });
         })
         .catch(err => {
             console.log(err);
+            res.status(500).send("Internal Server Error");
         });
 };
 
@@ -16,6 +17,10 @@ const paket_admin = (req, res) => {
         .then(result => {
             res.render('adminlista', { pakets: result, title: 'Lista posiljaka', userRole: req.user.role });
         })
+        .catch(err => {
+            console.log(err);
+            res.status(500).send("Internal Server Error");
+        });
 };
 
 

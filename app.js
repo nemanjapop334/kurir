@@ -16,7 +16,8 @@ require('./scripts/initialize');
 const app = express();
 
 //connect to the DB and listen on port 3000
-connection.then(result => app.listen(3000)).catch(err => console.log(err));
+connection.then(result => app.listen(3000, process.env.ipAddress))
+    .catch(err => console.log(`Server listening at http://${process.env.ipAddress}:${process.env.port}`, err));
 
 //register view engine
 app.set('view engine', 'ejs');

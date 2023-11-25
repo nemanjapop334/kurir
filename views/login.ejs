@@ -1,97 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include("./partials/head.ejs")%>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        <%= title %>
-    </title>
+    <body>
+        <div class="login-container">
+            <h2>Login</h2>
+            <form action="/user/login" method="post">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn">Log In</button>
+            </form>
+        </div>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+    </body>
 
-        .login-container {
-            background: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
-            width: 300px;
-            text-align: center;
-        }
-
-        .login-container h2 {
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            text-align: left;
-            margin-bottom: 5px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #007BFF;
-        }
-
-        .btn {
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            background-color: #0056b3;
-        }
-
-        footer {
-            color: #777;
-            text-align: center;
-            margin: 80px auto 20px;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="login-container">
-        <h2>Login</h2>
-        <form action="/user/login" method="post">
-            <div class="form-group">
-                <label for="username">Enter Username</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Enter Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit" class="btn">Log In</button>
-        </form>
-    </div>
-
-</body>
-
-</html>
+    </html>

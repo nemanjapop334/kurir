@@ -27,7 +27,7 @@ const paketSchema = new Schema({
         default: Date.now,
     },
     ptt: Number,
-});
+}, { timestamps: true });
 
 const Paket = connection.model('Paket', paketSchema);
 module.exports = Paket;

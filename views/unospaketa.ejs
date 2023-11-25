@@ -1,210 +1,101 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>
-        <%= title%>
-    </title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        .navbar {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-
-        .navbar a {
-            text-decoration: none;
-            margin: 0 10px;
-            color: #007bff;
-        }
-
-        form {
-            background: #f0f0f0;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        form label {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-        form input[type="text"],
-        form input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
-
-        form input[type="submit"] {
-            background: #007bff;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-
-        h2 {
-            margin-top: 20px;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        th,
-        td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background: #007bff;
-            color: #fff;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        tr:hover {
-            background-color: #e0e0e0;
-        }
-
-        footer {
-            color: #777;
-            text-align: center;
-            margin: 80px auto 20px;
-        }
-    </style>
-</head>
+<%- include("./partials/head2.ejs")%>
 
 
-<body>
-    <%- include("./partials/navbar.ejs")%>
+    <body>
+        <%- include("./partials/navbar.ejs")%>
+            <form action="/paket" method="POST">
+                <label for="imeprezime">Ime i Prezime:</label>
+                <input type="text" id="imeprezime" name="imeprezime" required><br>
 
-        <form action="/paket" method="POST">
-            <label for="imeprezime">Ime i Prezime:</label>
-            <input type="text" id="imeprezime" name="imeprezime" required><br>
+                <label for="adresa">Adresa:</label>
+                <input type="text" id="adresa" name="adresa" required><br>
 
-            <label for="adresa">Adresa:</label>
-            <input type="text" id="adresa" name="adresa" required><br>
+                <label for="telefon">Telefon:</label>
+                <input type="text" id="telefon" name="telefon" required><br>
 
-            <label for="telefon">Telefon:</label>
-            <input type="text" id="telefon" name="telefon" required><br>
+                <label for="cena">Cena:</label>
+                <input type="number" id="cena" name="cena" required><br>
 
-            <label for="cena">Cena:</label>
-            <input type="number" id="cena" name="cena" required><br>
+                <input type="submit" value="Unesi">
+            </form>
 
-            <input type="submit" value="Unesi">
-        </form>
+            <h2>Lista posiljaka</h2>
 
-        <h2>Lista posiljaka</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Ime i Prezime</th>
+                        <th>Adresa</th>
+                        <th>Telefon</th>
+                        <th>Cena</th>
+                        <th>PTT</th>
+                        <th>Datum i vreme</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if(pakets.length> 0) { %>
+                        <% var rowNumber=1; %>
+                            <% pakets.forEach(paket=> { %>
+                                <tr>
+                                    <td>
+                                        <%= rowNumber %>
+                                    </td>
+                                    <td>
+                                        <%= paket.imeprezime %>
+                                    </td>
+                                    <td>
+                                        <%= paket.adresa %>
+                                    </td>
+                                    <td>
+                                        <%= paket.telefon %>
+                                    </td>
+                                    <td>
+                                        <%= paket.cena %>
+                                    </td>
+                                    <td>
+                                        <%= paket.ptt %>
+                                    </td>
+                                    <td>
+                                        <%= new Date(paket.datum).toLocaleDateString('sr-RS') %>
+                                            <%= paket.datum.toLocaleTimeString('sr-RS') %>
+                                    </td>
+                                    </td>
+                                    <td>
+                                        <a class="delete" data-doc="<%= paket._id %>" href="#">
+                                            <img src="/public/trashcan.svg" alt="Trashcan Icon"></a>
+                                    </td>
+                                </tr>
+                                <% rowNumber++; %>
+                                    <% }); %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="5">Nema unetih posiljaka za prikaz</td>
+                                            </tr>
+                                            <% } %>
+                </tbody>
+            </table>
+            <script>
+                const deleteButtons = document.querySelectorAll('a.delete');
 
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Ime i Prezime</th>
-                    <th>Adresa</th>
-                    <th>Telefon</th>
-                    <th>Cena</th>
-                    <th>PTT</th>
-                    <th>Datum i vreme</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <% if(pakets.length> 0) { %>
-                    <% var rowNumber=1; %>
-                        <% pakets.forEach(paket=> { %>
-                            <tr>
-                                <td>
-                                    <%= rowNumber %>
-                                </td>
-                                <td>
-                                    <%= paket.imeprezime %>
-                                </td>
-                                <td>
-                                    <%= paket.adresa %>
-                                </td>
-                                <td>
-                                    <%= paket.telefon %>
-                                </td>
-                                <td>
-                                    <%= paket.cena %>
-                                </td>
-                                <td>
-                                    <%= paket.ptt %>
-                                </td>
-                                <td>
-                                    <%= new Date(paket.datum).toLocaleDateString('sr-RS') %>
-                                        <%= paket.datum.toLocaleTimeString('sr-RS') %>
-                                </td>
-                                </td>
-                                <td>
-                                    <a class="delete" data-doc="<%= paket._id %>" href="#">
-                                        <img src="/public/trashcan.svg" alt="Trashcan Icon"></a>
-                                </td>
-                            </tr>
-                            <% rowNumber++; %>
-                                <% }); %>
-                                    <% } else { %>
-                                        <tr>
-                                            <td colspan="5">Nema unetih posiljaka za prikaz</td>
-                                        </tr>
-                                        <% } %>
-            </tbody>
-        </table>
-        <script>
-            const deleteButtons = document.querySelectorAll('a.delete');
+                deleteButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const docId = button.getAttribute('data-doc');
+                        const endpoint = `/paket/${docId}`;
 
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const docId = button.getAttribute('data-doc');
-                    const endpoint = `/paket/${docId}`;
-
-                    fetch(endpoint, {
-                        method: 'DELETE',
-                    })
-                        .then(response => response.json())
-                        .then(data => window.location.href = data.redirect)
-                        .catch(err => console.log(err));
+                        fetch(endpoint, {
+                            method: 'DELETE',
+                        })
+                            .then(response => response.json())
+                            .then(data => window.location.href = data.redirect)
+                            .catch(err => console.log(err));
+                    });
                 });
-            });
 
-            // Sort userPackages by paket.adresa in ascending order
-            const userPackages = Array.from(document.querySelectorAll('tr')).slice(1); // Skip the header row
-            userPackages.sort((a, b) => {
-                const adresaA = a.querySelectorAll('td')[2].textContent.toLowerCase();
-                const adresaB = b.querySelectorAll('td')[2].textContent.toLowerCase();
-                return adresaA.localeCompare(adresaB);
-            });
+            </script>
+            <%- include("./partials/footer.ejs") %>
+    </body>
 
-            // Reorder the rows in the table based on the sorted userPackages
-            const tableBody = document.querySelector('tbody');
-            userPackages.forEach((packageRow, index) => {
-                tableBody.appendChild(packageRow);
-                packageRow.querySelector('td').textContent = index + 1;
-            });
-
-        </script>
-        <%- include("./partials/footer.ejs") %>
-</body>
-
-</html>
+    </html>

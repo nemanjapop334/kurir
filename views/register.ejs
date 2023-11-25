@@ -1,302 +1,147 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include("./partials/head.ejs")%>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        <%= title %>
-    </title>
-    <style>
-        /* Reset default browser styles */
-        body,
-        h2,
-        p,
-        ul,
-        li {
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            /* Remove default margin */
-        }
-
-        .register-container {
-            background: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            max-width: 400px;
-            /* Adjust the maximum width */
-            width: 100%;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            margin: 20px;
-            /* Add some spacing around the container */
-        }
-
-        .register-container h2 {
-            margin-bottom: 20px;
-            font-size: 24px;
-            /* Increase the font size */
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            text-align: left;
-            margin-bottom: 5px;
-            font-weight: bold;
-            /* Make labels bold */
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #007BFF;
-        }
-
-        .btn {
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-weight: bold;
-            /* Make the text bold */
-        }
-
-        .btn:hover {
-            background-color: #0056b3;
-        }
-
-        table {
-            width: 200%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            /* Add spacing between the form and the table */
-        }
-
-        th,
-        td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: center;
-        }
-
-        th {
-            background-color: #007BFF;
-            color: #fff;
-        }
-
-        .delete img {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-
-        .delete img:hover {
-            filter: brightness(85%);
-            /* Add a hover effect */
-        }
-
-        td a {
-            text-decoration: none;
-        }
-
-        td a:hover {
-            text-decoration: underline;
-            /* Add underline on hover */
-        }
-
-        td a:hover img {
-            filter: brightness(85%);
-            /* Adjust image brightness on hover */
-        }
-
-        .navbar {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-        }
-
-        .navbar a {
-            text-decoration: none;
-            margin: 0 10px;
-            color: #007bff;
-        }
-
-        .page-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
-    </style>
-</head>
-
-<body>
-    <%- include("./partials/navbar.ejs")%>
-        <div class="page-container">
-            <div class="register-container">
-                <h2>Registruj korisnika</h2>
-                <form action="/user/register" method="post">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" id="username" name="username" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="confirm-password">Confirm Password</label>
-                        <input type="password" id="confirm-password" name="confirm-password" required>
-                        <p id="password-match-message" style="color: red;"></p>
-                    </div>
-                    <div class="form-group" id="ptt-field">
-                        <div id="ptt-inner">
-                            <label for="ptt">PTT</label>
-                            <input type="number" id="ptt" name="ptt" required>
+    <body>
+        <%- include("./partials/navbar.ejs")%>
+            <div class="page-container">
+                <div class="register-container">
+                    <h2>Registruj korisnika</h2>
+                    <form action="/user/register" method="post">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" required>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="role">Role</label>
-                        <select id="role" name="role">
-                            <option value="klijent">Klijent</option>
-                            <option value="admin">Admin</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn">Sacuvaj</button>
-                </form>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm-password">Confirm Password</label>
+                            <input type="password" id="confirm-password" name="confirm-password" required>
+                            <p id="password-match-message" style="color: red;"></p>
+                        </div>
+                        <div class="form-group" id="ptt-field">
+                            <div id="ptt-inner">
+                                <label for="ptt">PTT</label>
+                                <input type="number" id="ptt" name="ptt" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="role">Role</label>
+                            <select id="role" name="role">
+                                <option value="klijent">Klijent</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn">Sacuvaj</button>
+                    </form>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Korisnik</th>
+                            <th>PTT</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if(users.length> 0) { %>
+                            <% var rowNumber=1; %>
+                                <% users.forEach(user=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= rowNumber %>
+                                        </td>
+                                        <td>
+                                            <%= user.username %>(<%= user.role %>)
+                                        </td>
+                                        <td>
+                                            <%= user.ptt %>
+                                        </td>
+                                        <td>
+                                            <a class="delete" data-doc="<%= user._id %>" href="#">
+                                                <img src="/public/trashcan.svg" alt="Trashcan Icon"></a>
+                                        </td>
+                                    </tr>
+                                    <% rowNumber++; %>
+                                        <% }); %>
+                                            <% } else { %>
+                                                <tr>
+                                                    <td colspan="5">Nema klijenata za prikaz!</td>
+                                                </tr>
+                                                <% } %>
+                    </tbody>
+                </table>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Korisnik</th>
-                        <th>PTT</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if(users.length> 0) { %>
-                        <% var rowNumber=1; %>
-                            <% users.forEach(user=> { %>
-                                <tr>
-                                    <td>
-                                        <%= rowNumber %>
-                                    </td>
-                                    <td>
-                                        <%= user.username %>(<%= user.role %>)
-                                    </td>
-                                    <td>
-                                        <%= user.ptt %>
-                                    </td>
-                                    <td>
-                                        <a class="delete" data-doc="<%= user._id %>" href="#">
-                                            <img src="/public/trashcan.svg" alt="Trashcan Icon"></a>
-                                    </td>
-                                </tr>
-                                <% rowNumber++; %>
-                                    <% }); %>
-                                        <% } else { %>
-                                            <tr>
-                                                <td colspan="5">Nema klijenata za prikaz!</td>
-                                            </tr>
-                                            <% } %>
-                </tbody>
-            </table>
-        </div>
 
 
-        <script>
-            const passwordInput = document.getElementById('password');
-            const confirmInput = document.getElementById('confirm-password');
-            const message = document.getElementById('password-match-message');
-            const form = document.querySelector('form');
+            <script>
+                const passwordInput = document.getElementById('password');
+                const confirmInput = document.getElementById('confirm-password');
+                const message = document.getElementById('password-match-message');
+                const form = document.querySelector('form');
 
-            function validatePassword() {
-                if (passwordInput.value !== confirmInput.value) {
-                    message.textContent = 'Passwords do not match.';
-                    form.addEventListener('submit', preventSubmit);
-                } else {
-                    message.textContent = '';
-                    form.removeEventListener('submit', preventSubmit);
+                function validatePassword() {
+                    if (passwordInput.value !== confirmInput.value) {
+                        message.textContent = 'Passwords do not match.';
+                        form.addEventListener('submit', preventSubmit);
+                    } else {
+                        message.textContent = '';
+                        form.removeEventListener('submit', preventSubmit);
+                    }
                 }
-            }
 
-            function preventSubmit(event) {
-                event.preventDefault();
-                message.textContent = 'Passwords do not match. Please make sure your passwords match.';
-            }
+                function preventSubmit(event) {
+                    event.preventDefault();
+                    message.textContent = 'Passwords do not match. Please make sure your passwords match.';
+                }
 
-            passwordInput.addEventListener('input', validatePassword);
-            confirmInput.addEventListener('input', validatePassword);
+                passwordInput.addEventListener('input', validatePassword);
+                confirmInput.addEventListener('input', validatePassword);
 
-            const deleteButtons = document.querySelectorAll('a.delete');
+                const deleteButtons = document.querySelectorAll('a.delete');
 
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const docId = button.getAttribute('data-doc');
-                    const endpoint = `/user/${docId}`;
+                deleteButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const docId = button.getAttribute('data-doc');
+                        const endpoint = `/user/${docId}`;
 
-                    fetch(endpoint, {
-                        method: 'DELETE',
-                    })
-                        .then(response => response.json())
-                        .then(data => window.location.href = data.redirect)
-                        .catch(err => console.log(err));
+                        fetch(endpoint, {
+                            method: 'DELETE',
+                        })
+                            .then(response => response.json())
+                            .then(data => window.location.href = data.redirect)
+                            .catch(err => console.log(err));
+                    });
                 });
-            });
 
 
 
-            const roleSelect = document.getElementById('role');
-            const pttInput = document.getElementById('ptt');
-            const pttInner = document.getElementById('ptt-inner');
+                const roleSelect = document.getElementById('role');
+                const pttInput = document.getElementById('ptt');
+                const pttInner = document.getElementById('ptt-inner');
 
-            function togglePTTField() {
-                const selectedRole = roleSelect.value;
+                function togglePTTField() {
+                    const selectedRole = roleSelect.value;
 
-                if (selectedRole === 'klijent') {
-                    pttInput.required = true; // Keep the 'required' attribute for "klijent"
-                    pttInput.style.display = 'block'; // Show the PTT field for "klijent"
-                    pttInner.style.display = 'block';
-                } else {
-                    pttInput.required = false; // Remove the 'required' attribute for other roles
-                    pttInput.style.display = 'none'; // Hide the PTT field for other roles
-                    pttInner.style.display = 'none';
+                    if (selectedRole === 'klijent') {
+                        pttInput.required = true; // Keep the 'required' attribute for "klijent"
+                        pttInput.style.display = 'block'; // Show the PTT field for "klijent"
+                        pttInner.style.display = 'block';
+                    } else {
+                        pttInput.required = false; // Remove the 'required' attribute for other roles
+                        pttInput.style.display = 'none'; // Hide the PTT field for other roles
+                        pttInner.style.display = 'none';
+                    }
                 }
-            }
 
-            // Initially set the 'required' attribute based on the default selected role
-            togglePTTField();
+                // Initially set the 'required' attribute based on the default selected role
+                togglePTTField();
 
-            roleSelect.addEventListener('change', togglePTTField);
-        </script>
+                roleSelect.addEventListener('change', togglePTTField);
+            </script>
 
-</body>
+    </body>
 
-</html>
+    </html>
