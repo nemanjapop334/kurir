@@ -7,10 +7,11 @@ const userContorller = require('../controllers/userController');
 //  * -------------- POST ROUTES ----------------
 router.post('/login', passport.authenticate('local', {
     failureRedirect: '/user/login',
-    failureFlash: 'Pogresna sifra ili username!'
+    failureFlash: 'Pogrešno korisničko ime ili šifra!'
 }), userContorller.user_login_post);
 router.post('/register', isAdmin, userContorller.user_register_post);
 router.post('/change-password', isAuth, userContorller.user_change_password_post);
+
 //---------------DELETE ROUTE--------------------
 router.delete('/:id', isAdmin, userContorller.user_delete);
 

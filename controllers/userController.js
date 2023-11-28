@@ -100,7 +100,7 @@ const user_delete = (req, res) => {
 const user_register_get = (req, res) => {
     User.find().sort({ createdAt: -1 })
         .then(result => {
-            res.render('register', { users: result, title: 'Klijenti', userRole: req.user.role });
+            res.render('register', { users: result, title: 'Korisnici', userRole: req.user.role });
         })
         .catch(err => {
             console.log(err);
