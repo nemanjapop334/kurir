@@ -1,2 +1,7 @@
-You have to create .env file with SECRET and DB_STRING, 
-and ADMIN_USERNAME and ADMIN_PASSWORD string for initial admin profile.
+You have to create .env file. It contains folowing strings:
+*DB_STRING=
+*SECRET=
+*ADMIN_USERNAME=
+*ADMIN_PASSWORD=
+*ipAdress=
+*port=
