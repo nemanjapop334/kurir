@@ -204,17 +204,6 @@ footer {
     color: #ffffff;
 }
 
-/* @media only screen and (max-width: 600px) {
-    .login-container {
-        padding: 10px;
-    }
-
-    input,
-    .btn {
-        padding: 5px;
-    }
-
-} */
 @media only screen and (max-width: 600px) {
     body {
         padding-top: 20px;

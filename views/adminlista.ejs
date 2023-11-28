@@ -10,6 +10,7 @@
                     <tr>
                         <th>#</th>
                         <th>Klijent</th>
+                        <th>Grad</th>
                         <th>Adresa</th>
                         <th>Telefon</th>
                         <th>Cena</th>
@@ -28,6 +29,9 @@
                                     </td>
                                     <td>
                                         <%= paket.klijent %>
+                                    </td>
+                                    <td>
+                                        <%= paket.grad %>
                                     </td>
                                     <td>
                                         <%= paket.adresa %>
@@ -76,21 +80,28 @@
                             .catch(err => console.log(err));
                     });
                 });
-
                 const tableBody = document.querySelector('tbody');
                 const rows = Array.from(tableBody.querySelectorAll('tr'));
 
-                // Sort rows by paket.klijent, and then by paket.adresa
+                // Sort rows by grad, klijent, adresa, and then by datum
                 rows.sort((a, b) => {
-                    const klijentA = a.querySelectorAll('td')[1].textContent.toLowerCase();
-                    const klijentB = b.querySelectorAll('td')[1].textContent.toLowerCase();
+                    const gradA = a.querySelectorAll('td')[1].textContent.toLowerCase();
+                    const gradB = b.querySelectorAll('td')[1].textContent.toLowerCase();
+                    const klijentA = a.querySelectorAll('td')[2].textContent.toLowerCase();
+                    const klijentB = b.querySelectorAll('td')[2].textContent.toLowerCase();
                     const adresaA = a.querySelectorAll('td')[3].textContent.toLowerCase();
                     const adresaB = b.querySelectorAll('td')[3].textContent.toLowerCase();
+                    const datumA = new Date(a.querySelectorAll('td')[7].textContent);
+                    const datumB = new Date(b.querySelectorAll('td')[7].textContent);
 
-                    if (klijentA !== klijentB) {
+                    if (gradA !== gradB) {
+                        return gradA.localeCompare(gradB);
+                    } else if (klijentA !== klijentB) {
                         return klijentA.localeCompare(klijentB);
-                    } else {
+                    } else if (adresaA !== adresaB) {
                         return adresaA.localeCompare(adresaB);
+                    } else {
+                        return datumA - datumB;
                     }
                 });
 
@@ -99,6 +110,8 @@
                     tableBody.appendChild(row);
                     row.querySelector('td').textContent = index + 1;
                 });
+
+
 
                 //Delete all confirm script
                 function confirmDelete() {

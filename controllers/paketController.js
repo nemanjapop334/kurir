@@ -27,6 +27,7 @@ const paket_admin = (req, res) => {
 const paket_create_post = (req, res) => {
     const combinedData = {
         klijent: req.user.username,
+        grad: req.body.grad,
         imeprezime: req.body.imeprezime,
         adresa: req.body.adresa,
         telefon: req.body.telefon,

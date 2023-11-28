@@ -15,7 +15,12 @@
 
                 <label for="cena">Cena:</label>
                 <input type="number" id="cena" name="cena" required><br>
-
+                <label for="grad">Grad:</label><br>
+                <select id="grad" name="grad">
+                    <option value="BG">BG</option>
+                    <option value="NS">NS</option>
+                    <option value="PA">PA</option>
+                </select><br>
                 <input type="submit" value="Unesi">
             </form>
 
@@ -25,6 +30,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>Grad</th>
                         <th>Ime i Prezime</th>
                         <th>Adresa</th>
                         <th>Telefon</th>
@@ -41,6 +47,9 @@
                                 <tr>
                                     <td>
                                         <%= rowNumber %>
+                                    </td>
+                                    <td>
+                                        <%= paket.grad %>
                                     </td>
                                     <td>
                                         <%= paket.imeprezime %>
