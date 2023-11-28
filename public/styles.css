@@ -1,221 +1,261 @@
- /* Reset default browser styles */
- body,
- h2,
- p,
- ul,
- li {
-     margin: 0;
-     padding: 0;
- }
+/* Reset default browser styles */
+body,
+h2,
+p,
+ul,
+li {
+    margin: 0;
+    padding: 0;
+}
 
- body {
-     font-family: Arial, sans-serif;
-     background-color: #f4f4f4;
-     display: flex;
-     justify-content: center;
-     align-items: center;
-     min-height: 100vh;
-     margin: 0;
-     /* Remove default margin */
- }
+body {
+    padding-top: 60px;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 20px;
+}
 
- .register-container {
-     background: #fff;
-     padding: 20px;
-     border-radius: 5px;
-     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-     max-width: 400px;
-     /* Adjust the maximum width */
-     width: 100%;
-     text-align: center;
-     display: flex;
-     flex-direction: column;
-     margin: 20px;
-     /* Add some spacing around the container */
- }
+.register-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    /* Adjust the maximum width */
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    /* Add some spacing around the container */
+}
 
- .register-container h2 {
-     margin-top: 40px;
-     margin-bottom: 20px;
-     font-size: 24px;
-     /* Increase the font size */
- }
+.register-container h2 {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-size: 24px;
+    /* Increase the font size */
+}
 
- .login-container {
-     background: #fff;
-     padding: 20px;
-     border-radius: 5px;
-     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
-     width: 300px;
-     text-align: center;
- }
+.login-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    text-align: center;
+}
 
- .login-container h2 {
-     margin-bottom: 20px;
- }
+.login-container h2 {
+    margin-bottom: 20px;
+}
 
- .register-container {
-     background: #fff;
-     padding: 20px;
-     border-radius: 5px;
-     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
-     width: 300px;
-     text-align: center;
- }
+.register-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    text-align: center;
+}
 
- .form-group {
-     margin-bottom: 20px;
- }
+.form-group {
+    margin-bottom: 20px;
+}
 
- .form-group label {
-     display: block;
-     text-align: left;
-     margin-bottom: 5px;
-     font-weight: bold;
-     /* Make labels bold */
- }
+.form-group label {
+    display: block;
+    text-align: left;
+    margin-bottom: 5px;
+    font-weight: bold;
+    /* Make labels bold */
+}
 
- .form-group input,
- .form-group select,
- .form-group textarea {
-     width: 100%;
-     padding: 10px;
-     border: 1px solid #ccc;
-     border-radius: 3px;
-     box-sizing: border-box;
-     /* Include padding and border in the width */
- }
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+    /* Include padding and border in the width */
+}
 
- .form-group input:focus {
-     outline: none;
-     border-color: #007BFF;
- }
+.form-group input:focus {
+    outline: none;
+    border-color: #007BFF;
+}
 
- .btn {
-     background-color: #007BFF;
-     color: #fff;
-     border: none;
-     padding: 10px 20px;
-     border-radius: 3px;
-     cursor: pointer;
-     font-weight: bold;
-     /* Make the text bold */
- }
+.btn {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: bold;
+    /* Make the text bold */
+}
 
- .btn:hover {
-     background-color: #0056b3;
- }
-
-
- .delete img {
-     width: 20px;
-     height: 20px;
-     cursor: pointer;
- }
-
- .delete img:hover {
-     filter: brightness(85%);
-     /* Add a hover effect */
- }
-
- table {
-     width: 100%;
-     border-collapse: collapse;
-     margin-top: 20px;
-     /* Add spacing between the form and the table */
- }
-
- th,
- td {
-     border: 1px solid #ccc;
-     padding: 8px;
-     text-align: center;
- }
-
- th {
-     background-color: #007BFF;
-     color: #fff;
- }
+.btn:hover {
+    background-color: #0056b3;
+}
 
 
+.delete img {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
 
- td a {
-     text-decoration: none;
- }
+.delete img:hover {
+    filter: brightness(85%);
+    /* Add a hover effect */
+}
 
- td a:hover {
-     text-decoration: underline;
-     /* Add underline on hover */
- }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    /* Add spacing between the form and the table */
+}
 
- td a:hover img {
-     filter: brightness(85%);
-     /* Adjust image brightness on hover */
- }
+th,
+td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
 
- tr:nth-child(even) {
-     background-color: #f2f2f2;
- }
+th {
+    background-color: #007BFF;
+    color: #fff;
+}
 
- tr:hover {
-     background-color: #e0e0e0;
- }
 
- footer {
-     color: #777;
-     text-align: center;
-     margin: 80px auto 20px;
- }
 
- /* .navbar {
-     position: fixed;
-     top: 20px;
-     right: 20px;
- }
+td a {
+    text-decoration: none;
+}
 
- .navbar a {
-     text-decoration: none;
-     margin: 0 10px;
-     color: #007bff;
- } */
+td a:hover {
+    text-decoration: underline;
+    /* Add underline on hover */
+}
 
- .page-container {
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-     justify-content: center;
-     min-height: 100vh;
- }
+td a:hover img {
+    filter: brightness(85%);
+    /* Adjust image brightness on hover */
+}
 
- .navbar {
-     position: fixed;
-     top: 0;
-     left: 0;
-     width: 100%;
-     background-color: #007bff;
-     padding: 10px;
-     z-index: 1000;
-     display: flex;
- }
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
 
- .navbar a {
-     text-decoration: none;
-     margin: 0 10px;
-     color: #ffffff;
- }
+tr:hover {
+    background-color: #e0e0e0;
+}
 
- @media only screen and (max-width: 600px) {
-     .login-container {
-         padding: 10px;
-     }
+footer {
+    color: #777;
+    text-align: center;
+    margin: 80px auto 20px;
+}
 
-     input,
-     .btn {
-         padding: 5px;
-     }
- }
+.page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
 
- #password-match-message {
-     color: red;
-     margin-top: 10px;
- }
+
+.error-message {
+    color: red;
+    margin-top: 5px;
+    /* Optional: Adds some space above the error message */
+}
+
+#password-match-message {
+    color: red;
+    margin-top: 10px;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #007bff;
+    padding: 10px;
+    z-index: 1000;
+    display: flex;
+}
+
+.navbar a {
+    text-decoration: none;
+    margin: 0 10px;
+    color: #ffffff;
+}
+
+/* @media only screen and (max-width: 600px) {
+    .login-container {
+        padding: 10px;
+    }
+
+    input,
+    .btn {
+        padding: 5px;
+    }
+
+} */
+@media only screen and (max-width: 600px) {
+    body {
+        padding-top: 20px;
+        /* Adjust top padding */
+        margin: 10px;
+        /* Adjust margin */
+    }
+
+    .register-container,
+    .login-container {
+        width: 100%;
+        /* Make containers full width */
+        max-width: none;
+        /* Remove max-width constraint */
+    }
+
+    .register-container h2,
+    .login-container h2 {
+        font-size: 20px;
+        /* Decrease font size */
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 8px;
+        /* Adjust input padding */
+    }
+
+    .btn {
+        padding: 8px 16px;
+        /* Adjust button padding */
+    }
+
+    .navbar {
+        padding: 5px;
+        /* Adjust padding */
+    }
+
+    .navbar a {
+        margin: 0 5px;
+        /* Adjust link margin */
+    }
+}

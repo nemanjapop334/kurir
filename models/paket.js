@@ -6,6 +6,7 @@ const connection = require('../lib/dbconnection');
 
 const paketSchema = new Schema({
     klijent: String,
+    grad: String,
     imeprezime: {
         type: String,
         required: true

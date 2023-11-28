@@ -5,7 +5,10 @@ const isAdmin = require('../middleware/authMiddleware').isAdmin;
 const userContorller = require('../controllers/userController');
 
 //  * -------------- POST ROUTES ----------------
-router.post('/login', passport.authenticate('local', { failureRedirect: '/user/login' }), userContorller.user_login_post);
+router.post('/login', passport.authenticate('local', {
+    failureRedirect: '/user/login',
+    failureFlash: 'Pogresna sifra ili username!'
+}), userContorller.user_login_post);
 router.post('/register', isAdmin, userContorller.user_register_post);
 router.post('/change-password', isAuth, userContorller.user_change_password_post);
 //---------------DELETE ROUTE--------------------

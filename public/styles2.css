@@ -106,3 +106,62 @@ form input[type="submit"] {
     margin: 0 10px;
     color: #ffffff;
 }
+
+.izbrisi-listu button {
+    background-color: #ff0000;
+    /* Red background color */
+    color: #ffffff;
+    /* White text color */
+    padding: 10px 15px;
+    /* Add some padding for better appearance */
+    border: none;
+    /* Remove border */
+    cursor: pointer;
+    /* Add a pointer cursor on hover */
+    border-radius: 5px;
+    /* Add some border-radius for rounded corners */
+}
+
+.izbrisi-listu button:hover {
+    background-color: #cc0000;
+    /* Darker red on hover */
+}
+
+@media only screen and (max-width: 600px) {
+    body {
+        padding-top: 0;
+    }
+
+    h2 {
+        margin-top: 40px;
+    }
+
+    table {
+        margin-top: 10px;
+    }
+
+    form {
+        padding: 15px;
+    }
+
+    form input[type="text"],
+    form input[type="number"] {
+        padding: 8px;
+    }
+
+    form input[type="submit"] {
+        padding: 8px 15px;
+    }
+
+    .navbar {
+        padding: 5px;
+    }
+
+    .navbar a {
+        margin: 0 5px;
+    }
+
+    .izbrisi-listu button {
+        padding: 8px 12px;
+    }
+}

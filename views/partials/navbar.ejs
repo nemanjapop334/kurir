@@ -1,15 +1,15 @@
 <% if (userRole==='klijent' ) { %>
     <div class="navbar">
-        <a href="/user/change-password">Promeni sifru</a>
+        <a href="/user/change-password">Promeni šifru</a>
         <a href="/paket/export-to-excel">Download Excel</a>
         <a href="/paket">Unos paketa</a>
         <a href="/user/logout">Logout</a>
     </div>
     <% } else if (userRole==='admin' ) { %>
         <div class="navbar">
-            <a href="/user/change-password">Promeni sifru</a>
+            <a href="/user/change-password">Promeni šifru</a>
             <a href="/paket/export-to-excel">Download Excel</a>
-            <a href="/paket/admin">Lista Posiljaka</a>
+            <a href="/paket/admin">Lista Pošiljaka</a>
             <a href="/user/register">Korisnici</a>
             <a href="/user/logout">Logout</a>
         </div>

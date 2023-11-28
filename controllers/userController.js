@@ -4,10 +4,18 @@ const validPassword = require('../lib/passwordUtils').validPassword;
 
 
 const user_login_post = (req, res) => {
-    if (req.user.role === 'admin') {
-        res.redirect('/paket/admin'); // Redirect admin to the '/admin' route
+    // Check for flash messages
+    const error = req.flash('error')[0];
+    // If the user is authenticated, redirect to the appropriate route
+    if (req.isAuthenticated()) {
+        if (req.user.role === 'admin') {
+            res.redirect('/paket/admin'); // Redirect admin to the '/admin' route
+        } else {
+            res.redirect('/paket'); // Redirect non-admin users to the '/user' route
+        }
     } else {
-        res.redirect('/paket'); // Redirect non-admin users to the '/user' route
+        // If not authenticated, render the login page with the error message
+        res.render('login', { title: 'Login', error });
     }
 };
 
@@ -59,12 +67,12 @@ const user_change_password_post = (req, res) => {
                 } else {
                     // Handle incorrect new password error
                     error = 'new-password';
-                    throw new Error('New passwords do not match');
+                    throw new Error('Nove šifre se ne poklapaju.');
                 }
             } else {
                 // Handle incorrect current password error
                 error = 'current-password';
-                throw new Error('Netacan unos trenutne sifre');
+                throw new Error('Netačan unos trenutne šifre.');
             }
         })
         .then(() => {
@@ -73,7 +81,7 @@ const user_change_password_post = (req, res) => {
         })
         .catch((error) => {
             console.error('Error changing password:', error);
-            res.render('changepassword', { title: 'Promeni sifru', error: error.message, userRole: req.user.role });
+            res.render('changepassword', { title: 'Promeni šifru', error: error.message, userRole: req.user.role });
         });
 };
 
@@ -108,15 +116,15 @@ const user_login_get = (req, res) => {
             res.redirect('/paket'); // Redirect to '/paket' if already logged in
         }
     } else {
-        const errorMessage = req.flash('error')[0];
-        res.render('login', { title: 'Login', errorMessage });
+        const error = req.flash('error')[0] || null;
+        res.render('login', { title: 'Login', error });
     }
 };
 
 const user_change_password_get = (req, res) => {
     // Ensure that the error variable is defined (even if it's null)
     const error = req.flash('error')[0] || null;
-    res.render('changepassword', { title: 'Promeni sifru', error, userRole: req.user.role });
+    res.render('changepassword', { title: 'Promeni šifru', error, userRole: req.user.role });
 };
 
 module.exports = {

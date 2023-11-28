@@ -7,15 +7,15 @@
                     <h2>Registruj korisnika</h2>
                     <form action="/user/register" method="post">
                         <div class="form-group">
-                            <label for="username">Username</label>
+                            <label for="username">Korisničko ime:</label>
                             <input type="text" id="username" name="username" required>
                         </div>
                         <div class="form-group">
-                            <label for="password">Password</label>
+                            <label for="password">Šifra:</label>
                             <input type="password" id="password" name="password" required>
                         </div>
                         <div class="form-group">
-                            <label for="confirm-password">Confirm Password</label>
+                            <label for="confirm-password">Potvrdi šifru:</label>
                             <input type="password" id="confirm-password" name="confirm-password" required>
                             <p id="password-match-message" style="color: red;"></p>
                         </div>
@@ -32,7 +32,7 @@
                                 <option value="admin">Admin</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn">Sacuvaj</button>
+                        <button type="submit" class="btn">Sačuvaj</button>
                     </form>
                 </div>
                 <table>
@@ -83,7 +83,7 @@
 
                 function validatePassword() {
                     if (passwordInput.value !== confirmInput.value) {
-                        message.textContent = 'Passwords do not match.';
+                        message.textContent = 'Šifre se ne poklapaju.';
                         form.addEventListener('submit', preventSubmit);
                     } else {
                         message.textContent = '';
@@ -93,7 +93,7 @@
 
                 function preventSubmit(event) {
                     event.preventDefault();
-                    message.textContent = 'Passwords do not match. Please make sure your passwords match.';
+                    message.textContent = 'Šifre se ne poklapaju. Molim vas da proverite da li se vaše šifre poklapaju.';
                 }
 
                 passwordInput.addEventListener('input', validatePassword);
