@@ -5,7 +5,10 @@ module.exports.timeRestrictedAccsess = (req, res, next) => {
     const userRole = req.user.role;
 
     // Allow access only between 11 and 12 o'clock for "klijent" role
-    if (userRole === 'klijent' && currentTime >= 11 && currentTime < 12) {
+    if (userRole === 'klijent' && currentTime >= 13 && currentTime < 14) {
+        req.flash('info', 'Unos i brisanje pošiljaka za današnji dan je završen. Započnite unos pošiljaka za sutra nakon 12h. Hvala na razumevanju!');
+
+
         res.redirect('/paket');
     } else {
         next();

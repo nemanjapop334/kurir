@@ -143,6 +143,11 @@ form select:focus {
     border-color: #007BFF;
 }
 
+.error-message {
+    color: red;
+    margin-top: 5px;
+}
+
 @media only screen and (max-width: 600px) {
     body {
         padding-top: 0;

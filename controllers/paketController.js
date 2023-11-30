@@ -1,10 +1,11 @@
 const Paket = require('../models/paket');
 
 const paket_index = (req, res) => {
+    const info = req.flash('info')[0] || null;
     const klijent = req.user.username;
     Paket.find({ klijent: klijent }).sort({ createdAt: -1 })
         .then(result => {
-            res.render('unospaketa', { pakets: result, title: `${klijent} UNOS PAKETA`, userRole: req.user.role });
+            res.render('unospaketa', { pakets: result, title: `${klijent} UNOS PAKETA`, userRole: req.user.role, info });
         })
         .catch(err => {
             console.log(err);

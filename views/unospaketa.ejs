@@ -22,6 +22,11 @@
                     <option value="PA">PA</option>
                 </select><br>
                 <input type="submit" value="Unesi">
+                <% if (info) { %>
+                    <p class="error-message">
+                        <%= info %>
+                    </p>
+                    <% } %>
             </form>
 
             <h2>Lista pošiljaka</h2>

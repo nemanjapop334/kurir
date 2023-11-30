@@ -4,10 +4,12 @@ require('dotenv').config();
 
 
 User.findOne({ role: 'admin' }, (err, admin) => {
+    console.log('Checking for admin user...');
     if (err) {
         console.error('Error checking for admin user:', err);
     }
     if (!admin) {
+        console.log('Admin user not found. Creating...');
         const saltHash = genPassword(process.env.ADMIN_PASSWORD);
         const salt = saltHash.salt;
         const hash = saltHash.hash;
@@ -27,5 +29,7 @@ User.findOne({ role: 'admin' }, (err, admin) => {
                 console.log('Default admin user created.');
             }
         });
+    } else {
+        console.log('Admin user found.');
     }
 });
