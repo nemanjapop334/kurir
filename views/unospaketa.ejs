@@ -7,14 +7,16 @@
                 <label for="imeprezime">Ime i Prezime:</label>
                 <input type="text" id="imeprezime" name="imeprezime" required><br>
 
-                <label for="adresa">Adresa:</label>
+                <label for="adresa">Adresa i opština:</label>
                 <input type="text" id="adresa" name="adresa" required><br>
 
                 <label for="telefon">Telefon:</label>
                 <input type="text" id="telefon" name="telefon" required><br>
 
-                <label for="cena">Cena:</label>
+                <label for="cena">Cena bez ptt-a:</label>
                 <input type="number" id="cena" name="cena" required><br>
+                <label for="napomena">Napomena:</label>
+                <input type="text" id="napomena" name="napomena"><br>
                 <label for="grad">Grad:</label><br>
                 <select id="grad" name="grad">
                     <option value="BG">BG</option>
@@ -29,7 +31,7 @@
                     <% } %>
             </form>
 
-            <h2>Lista pošiljaka</h2>
+            <h2 class="title">Lista pošiljaka</h2>
             <table>
                 <thead>
                     <tr>
@@ -40,7 +42,7 @@
                         <th>Telefon</th>
                         <th>Cena</th>
                         <th>PTT</th>
-                        <th>Datum i vreme</th>
+                        <th>Datum</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -72,7 +74,6 @@
                                     </td>
                                     <td>
                                         <%= new Date(paket.datum).toLocaleDateString('sr-RS') %>
-                                            <%= paket.datum.toLocaleTimeString('sr-RS') %>
                                     </td>
                                     </td>
                                     <td>
@@ -90,6 +91,7 @@
                 </tbody>
             </table>
             <script>
+                // Delete one
                 const deleteButtons = document.querySelectorAll('a.delete');
 
                 deleteButtons.forEach(button => {

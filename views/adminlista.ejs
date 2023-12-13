@@ -2,8 +2,8 @@
 
     <body>
         <%- include("./partials/navbar.ejs")%>
-            <h2>Lista pošiljaka</h2>
-            <p class="izbrisi-listu"> <button onclick="confirmDelete()">Izbriši listu</button></p>
+            <h2 class="title">Lista pošiljaka</h2>
+            <p class="delete-all"> <button onclick="confirmDelete()">Izbriši listu</button></p>
 
             <table>
                 <thead>
@@ -15,7 +15,7 @@
                         <th>Telefon</th>
                         <th>Cena</th>
                         <th>PTT</th>
-                        <th>Datum i vreme</th>
+                        <th>Datum</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -47,7 +47,6 @@
                                     </td>
                                     <td>
                                         <%= new Date(paket.datum).toLocaleDateString('sr-RS') %>
-                                            <%= paket.datum.toLocaleTimeString('sr-RS') %>
                                     </td>
                                     <td>
                                         <a class="delete" data-doc="<%= paket._id %>" href="#">
@@ -64,6 +63,8 @@
                 </tbody>
             </table>
             <script>
+
+                // Delete one function
                 const deleteButtons = document.querySelectorAll('a.delete');
 
                 deleteButtons.forEach(button => {
@@ -80,8 +81,6 @@
                             .catch(err => console.log(err));
                     });
                 });
-                const tableBody = document.querySelector('tbody');
-                const rows = Array.from(tableBody.querySelectorAll('tr'));
 
                 // Sort rows by grad, klijent, adresa, and then by datum
                 rows.sort((a, b) => {

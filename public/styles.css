@@ -8,6 +8,10 @@ li {
     padding: 0;
 }
 
+h2.title {
+    color: #007BFF;
+}
+
 body {
     padding-top: 60px;
     font-family: Arial, sans-serif;

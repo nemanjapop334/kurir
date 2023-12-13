@@ -8,6 +8,10 @@ h2 {
     margin-top: 20px;
 }
 
+h2.title {
+    color: #007BFF;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -107,7 +111,7 @@ form input[type="submit"] {
     color: #ffffff;
 }
 
-.izbrisi-listu button {
+.delete-all button {
     background-color: #ff0000;
     /* Red background color */
     color: #ffffff;
@@ -120,9 +124,11 @@ form input[type="submit"] {
     /* Add a pointer cursor on hover */
     border-radius: 5px;
     /* Add some border-radius for rounded corners */
+    font-weight: bold;
+    /* Make the text bold */
 }
 
-.izbrisi-listu button:hover {
+.delete-all button:hover {
     background-color: #cc0000;
     /* Darker red on hover */
 }

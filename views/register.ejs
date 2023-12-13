@@ -21,8 +21,16 @@
                         </div>
                         <div class="form-group" id="ptt-field">
                             <div id="ptt-inner">
-                                <label for="ptt">PTT</label>
-                                <input type="number" id="ptt" name="ptt" required>
+                                <label for="pttBG">PTT BG:</label>
+                                <input type="number" id="pttBG" name="pttBG" required>
+                            </div>
+                            <div id="ptt-inner">
+                                <label for="pttNS">PTT NS:</label>
+                                <input type="number" id="pttNS" name="pttNS" required>
+                            </div>
+                            <div id="ptt-inner">
+                                <label for="pttPA">PTT PA:</label>
+                                <input type="number" id="pttPA" name="pttPA" required>
                             </div>
                         </div>
                         <div class="form-group">
@@ -40,7 +48,9 @@
                         <tr>
                             <th>#</th>
                             <th>Korisnik</th>
-                            <th>PTT</th>
+                            <th>BG-ptt</th>
+                            <th>NS-ptt</th>
+                            <th>PA-ptt</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -56,7 +66,13 @@
                                             <%= user.username %>(<%= user.role %>)
                                         </td>
                                         <td>
-                                            <%= user.ptt %>
+                                            <%= user.pttBG %>
+                                        </td>
+                                        <td>
+                                            <%= user.pttNS %>
+                                        </td>
+                                        <td>
+                                            <%= user.pttPA %>
                                         </td>
                                         <td>
                                             <a class="delete" data-doc="<%= user._id %>" href="#">
@@ -76,6 +92,8 @@
 
 
             <script>
+
+                //password
                 const passwordInput = document.getElementById('password');
                 const confirmInput = document.getElementById('confirm-password');
                 const message = document.getElementById('password-match-message');
@@ -100,41 +118,53 @@
                 confirmInput.addEventListener('input', validatePassword);
 
                 const deleteButtons = document.querySelectorAll('a.delete');
-
+                // Delete button
                 deleteButtons.forEach(button => {
                     button.addEventListener('click', (e) => {
                         e.preventDefault();
-                        const docId = button.getAttribute('data-doc');
-                        const endpoint = `/user/${docId}`;
 
-                        fetch(endpoint, {
-                            method: 'DELETE',
-                        })
-                            .then(response => response.json())
-                            .then(data => window.location.href = data.redirect)
-                            .catch(err => console.log(err));
+                        const isConfirmed = confirm('Da li ste sigurni da želite obrisati korisnika?');
+
+                        if (isConfirmed) {
+                            const docId = button.getAttribute('data-doc');
+                            const endpoint = `/user/${docId}`;
+
+                            fetch(endpoint, {
+                                method: 'DELETE',
+                            })
+                                .then(response => response.json())
+                                .then(data => window.location.href = data.redirect)
+                                .catch(err => console.log(err));
+                        }
                     });
                 });
 
-
-
                 const roleSelect = document.getElementById('role');
-                const pttInput = document.getElementById('ptt');
-                const pttInner = document.getElementById('ptt-inner');
+                const pttField = document.getElementById('ptt-field');
+                const pttInputs = Array.from(document.querySelectorAll('#ptt-field input'));
 
                 function togglePTTField() {
                     const selectedRole = roleSelect.value;
 
-                    if (selectedRole === 'klijent') {
-                        pttInput.required = true; // Keep the 'required' attribute for "klijent"
-                        pttInput.style.display = 'block'; // Show the PTT field for "klijent"
-                        pttInner.style.display = 'block';
+                    if (selectedRole === 'admin') {
+                        // Sakrij PTT polja za admina
+                        pttField.style.display = 'none';
+                        pttInputs.forEach(input => {
+                            input.required = false;
+                        });
                     } else {
-                        pttInput.required = false; // Remove the 'required' attribute for other roles
-                        pttInput.style.display = 'none'; // Hide the PTT field for other roles
-                        pttInner.style.display = 'none';
+                        // Prikazi PTT polja za klijenta
+                        pttField.style.display = 'block';
+                        pttInputs.forEach(input => {
+                            input.required = true;
+                        });
                     }
                 }
+
+                // Inicijalno postavi 'required' atribut na osnovu podrazumevane uloge
+                togglePTTField();
+
+                roleSelect.addEventListener('change', togglePTTField);
 
                 // Initially set the 'required' attribute based on the default selected role
                 togglePTTField();

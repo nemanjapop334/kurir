@@ -26,6 +26,9 @@ const paket_admin = (req, res) => {
 
 
 const paket_create_post = (req, res) => {
+
+    const ptt = req.user[`ptt${req.body.grad}`];
+
     const combinedData = {
         klijent: req.user.username,
         grad: req.body.grad,
@@ -33,17 +36,18 @@ const paket_create_post = (req, res) => {
         adresa: req.body.adresa,
         telefon: req.body.telefon,
         cena: req.body.cena,
-        ptt: req.user.ptt,
+        ptt: ptt,
     };
     const paket = new Paket(combinedData);
     paket.save()
         .then(result => {
-            res.redirect('/paket');
+            console.log(result);
+            res.redirect(303, '/paket');
         })
         .catch(err => {
             console.log(err);
         });
-}
+};
 
 const paket_delete = (req, res) => {
     const id = req.params.id;
@@ -54,7 +58,7 @@ const paket_delete = (req, res) => {
         .catch(err => {
             console.log(err);
         });
-}
+};
 
 const paket_delete_all = async (req, res) => {
     try {
@@ -72,4 +76,4 @@ module.exports = {
     paket_delete,
     paket_admin,
     paket_delete_all,
-}
+};

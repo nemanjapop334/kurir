@@ -20,7 +20,6 @@ const user_login_post = (req, res) => {
 };
 
 const user_register_post = (req, res) => {
-
     const saltHash = genPassword(req.body.password);
 
     const salt = saltHash.salt;
@@ -32,15 +31,21 @@ const user_register_post = (req, res) => {
         hash: hash,
         salt: salt,
         role: role, // Save the selected role to the 'role' field in your User model
-        ptt: (role === 'klijent' ? req.body.ptt : null) // Save the PTT value only for 'klijent'
+        pttBG: (role === 'klijent' ? req.body.pttBG : null), // Save the PTT value only for 'klijent'
+        pttNS: (role === 'klijent' ? req.body.pttNS : null),
+        pttPA: (role === 'klijent' ? req.body.pttPA : null)
     });
 
     newUser.save()
         .then((user) => {
             console.log(user);
+            res.redirect('/user/register');
+        })
+        .catch((error) => {
+            console.error(error);
+            // Handle the error appropriately, e.g., render an error page
+            res.status(500).send('Internal Server Error');
         });
-
-    res.redirect('/user/register');
 };
 
 const user_change_password_post = (req, res) => {

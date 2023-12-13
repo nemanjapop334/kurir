@@ -4,7 +4,8 @@ const connection = require('../lib/dbconnection');
 const UserSchema = new mongoose.Schema({
     username: {
         type: String,
-        required: true
+        required: true,
+        index: true,
     },
     hash: String,
     salt: String,
@@ -12,7 +13,9 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    ptt: Number,
+    pttBG: Number,
+    pttNS: Number,
+    pttPA: Number,
 });
 
 const User = connection.model('User', UserSchema);
