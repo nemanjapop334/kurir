@@ -8,13 +8,13 @@ const paketSchema = new Schema({
     klijent: {
         type: String,
         index: true,
+        required: true
     },
     grad: String,
     imeprezime: {
         type: String,
         required: true
     },
-    grad: String,
     adresa: {
         type: String,
         required: true
@@ -31,27 +31,46 @@ const paketSchema = new Schema({
         type: Date,
         index: true,
         default: function () {
-            // Postavi datum na sutrašnji dan ako trenutno vreme prelazi podne
             const today = new Date();
-            const currentHour = today.getHours();
-            const cutoffHour = 12; // Postavljanje vremena preseka na podne
+            const currentDay = today.getDay(); // Sunday is 0, Monday is 1, ..., Friday is 5, Saturday is 6
+            const cutoffHour = 12;
 
-            // Ako je trenutno vreme pre podne, ostavi datum na današnji dan
-            if (currentHour < cutoffHour) {
+            // If the day is from Monday to Friday and the current time is before 12 PM, set the date to today
+            if (currentDay >= 1 && currentDay <= 5 && today.getHours() < cutoffHour) {
+                today.setHours(0, 0, 0, 0);
                 return today;
             }
 
-            // Ako je trenutno vreme posle podne, postavi datum na sutrašnji dan
-            const tomorrow = new Date(today);
-            tomorrow.setDate(today.getDate() + 1);
-            return tomorrow;
+            // If the day is from Monday to Thursday and the current time is after 12 PM, set the date to tomorrow
+            if (currentDay >= 1 && currentDay <= 4 && today.getHours() >= cutoffHour) {
+                const tomorrow = new Date(today);
+                tomorrow.setDate(today.getDate() + 1);
+                tomorrow.setHours(0, 0, 0, 0);
+                return tomorrow;
+            }
+
+            // Check if it's Friday after 12 PM, Saturday, or Sunday
+            if (currentDay === 5 && today.getHours() >= cutoffHour) {
+                // If it's Friday after 12 PM, set the date to Monday
+                const nextMonday = new Date(today);
+                nextMonday.setDate(today.getDate() + 3);  // Add 3 days (Friday, Saturday, Sunday)
+                nextMonday.setHours(0, 0, 0, 0);
+                return nextMonday;
+            } else if (currentDay === 6 || currentDay === 0) {
+                // If it's Saturday or Sunday, set the date to the next Monday
+                const daysUntilMonday = (currentDay === 6) ? 1 : 0;
+                const nextMonday = new Date(today);
+                nextMonday.setDate(today.getDate() + 1 + daysUntilMonday); // Add 1 or 2 days
+                nextMonday.setHours(0, 0, 0, 0);
+                return nextMonday;
+            }
         },
     },
     ptt: Number,
     napomena: String,
     expiresAt: {
         type: Date,
-        // Set the default expiration date to one month from the current date
+        // Set the default expiration date to 7 days from the current date
         default: () => new Date(+new Date() + 7 * 24 * 60 * 60 * 1000),
     },
 }, { timestamps: true });

@@ -1,13 +1,22 @@
 module.exports.timeRestrictedAccsess = (req, res, next) => {
     // Check the current time
-    const currentTime = new Date().getHours();
+    const currentHour = new Date().getHours();
+    const currentMinutes = new Date().getMinutes();
 
     const userRole = req.user.role;
-    const timeRestrictStart = 10;
-    const timeRestrictEnd = 14;
+    const timeRestrictStartHour = 10;
+    const timeRestrictStartMinutes = 30;
+    const timeRestrictEndHour = 14;
+    const timeRestrictEndMinutes = 0;
 
-    // Allow access only between 11 and 12 o'clock for "klijent" role
-    if (userRole === 'klijent' && currentTime >= timeRestrictStart && currentTime < timeRestrictEnd) {
+    // Convert the current time to minutes for easier comparison
+    const currentTimeInMinutes = currentHour * 60 + currentMinutes;
+
+    // Convert the time restriction time to minutes
+    const timeRestrictStartInMinutes = timeRestrictStartHour * 60 + timeRestrictStartMinutes;
+    const timeRestrictEndInMinutes = timeRestrictEndHour * 60 + timeRestrictEndMinutes;
+    // Allow access only between 10:30 and 14:00 o'clock for "klijent" role
+    if (userRole === 'klijent' && currentTimeInMinutes >= timeRestrictStartInMinutes && currentTimeInMinutes < timeRestrictEndInMinutes) {
         req.flash('info', 'Unos i brisanje pošiljaka za današnji dan je završen. Pošiljke za sutra moćićete da unosite nakon 14h. Hvala na razumevanju!');
 
 
