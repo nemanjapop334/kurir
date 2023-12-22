@@ -4,8 +4,8 @@ module.exports.timeRestrictedAccsess = (req, res, next) => {
     const currentMinutes = new Date().getMinutes();
 
     const userRole = req.user.role;
-    const timeRestrictStartHour = 10;
-    const timeRestrictStartMinutes = 30;
+    const timeRestrictStartHour = 11;
+    const timeRestrictStartMinutes = 15;
     const timeRestrictEndHour = 14;
     const timeRestrictEndMinutes = 0;
 
