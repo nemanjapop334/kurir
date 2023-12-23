@@ -41,7 +41,6 @@ const paket_create_post = (req, res) => {
     const paket = new Paket(combinedData);
     paket.save()
         .then(result => {
-            console.log(result);
             res.redirect(303, '/paket');
         })
         .catch(err => {

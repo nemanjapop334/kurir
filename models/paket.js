@@ -37,7 +37,7 @@ const paketSchema = new Schema({
 
             // If the day is from Monday to Friday and the current time is before 12 PM, set the date to today
             if (currentDay >= 1 && currentDay <= 5 && today.getHours() < cutoffHour) {
-                today.setHours(0, 0, 0, 0);
+                today.setHours(1, 0, 0, 0);
                 return today;
             }
 
@@ -45,7 +45,7 @@ const paketSchema = new Schema({
             if (currentDay >= 1 && currentDay <= 4 && today.getHours() >= cutoffHour) {
                 const tomorrow = new Date(today);
                 tomorrow.setDate(today.getDate() + 1);
-                tomorrow.setHours(0, 0, 0, 0);
+                tomorrow.setHours(1, 0, 0, 0);
                 return tomorrow;
             }
 
@@ -54,14 +54,14 @@ const paketSchema = new Schema({
                 // If it's Friday after 12 PM, set the date to Monday
                 const nextMonday = new Date(today);
                 nextMonday.setDate(today.getDate() + 3);  // Add 3 days (Friday, Saturday, Sunday)
-                nextMonday.setHours(0, 0, 0, 0);
+                nextMonday.setHours(1, 0, 0, 0);
                 return nextMonday;
             } else if (currentDay === 6 || currentDay === 0) {
                 // If it's Saturday or Sunday, set the date to the next Monday
                 const daysUntilMonday = (currentDay === 6) ? 1 : 0;
                 const nextMonday = new Date(today);
                 nextMonday.setDate(today.getDate() + 1 + daysUntilMonday); // Add 1 or 2 days
-                nextMonday.setHours(0, 0, 0, 0);
+                nextMonday.setHours(1, 0, 0, 0);
                 return nextMonday;
             }
         },
