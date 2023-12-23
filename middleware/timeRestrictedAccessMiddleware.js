@@ -12,6 +12,7 @@ module.exports.timeRestrictedAccsess = (req, res, next) => {
     // Convert the current time to minutes for easier comparison
     const currentTimeInMinutes = currentHour * 60 + currentMinutes;
 
+    //exclude weekend from time accsess
     const isWeekend = [0, 6].includes(new Date().getDay());
 
     // Convert the time restriction time to minutes
