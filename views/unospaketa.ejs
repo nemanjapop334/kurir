@@ -44,6 +44,7 @@
                         <th>Cena</th>
                         <th>PTT</th>
                         <th>Datum</th>
+                        <th>Napomena</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -76,6 +77,8 @@
                                     <td>
                                         <%= new Date(paket.datum).toLocaleDateString('sr-RS') %>
                                     </td>
+                                    <td>
+                                        <%= paket.napomena %>
                                     </td>
                                     <td>
                                         <a class="delete" data-doc="<%= paket._id %>" href="#">
@@ -98,15 +101,19 @@
                 deleteButtons.forEach(button => {
                     button.addEventListener('click', (e) => {
                         e.preventDefault();
-                        const docId = button.getAttribute('data-doc');
-                        const endpoint = `/paket/${docId}`;
+                        const isConfirmed = confirm('Obrisi pošiljku?')
 
-                        fetch(endpoint, {
-                            method: 'DELETE',
-                        })
-                            .then(response => response.json())
-                            .then(data => window.location.href = data.redirect)
-                            .catch(err => console.log(err));
+                        if (isConfirmed) {
+                            const docId = button.getAttribute('data-doc');
+                            const endpoint = `/paket/${docId}`;
+
+                            fetch(endpoint, {
+                                method: 'DELETE',
+                            })
+                                .then(response => response.json())
+                                .then(data => window.location.href = data.redirect)
+                                .catch(err => console.log(err));
+                        }
                     });
                 });
 

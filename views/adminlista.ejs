@@ -11,11 +11,14 @@
                         <th>#</th>
                         <th>Klijent</th>
                         <th>Grad</th>
+                        <th>Ime i Prezime</th>
                         <th>Adresa</th>
                         <th>Telefon</th>
                         <th>Cena</th>
                         <th>PTT</th>
                         <th>Datum</th>
+                        <th>Vreme unosa</th>
+                        <th>Napomena</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -34,6 +37,9 @@
                                         <%= paket.grad %>
                                     </td>
                                     <td>
+                                        <%= paket.imeprezime %>
+                                    </td>
+                                    <td>
                                         <%= paket.adresa %>
                                     </td>
                                     <td>
@@ -47,6 +53,12 @@
                                     </td>
                                     <td>
                                         <%= new Date(paket.datum).toLocaleDateString('sr-RS') %>
+                                    </td>
+                                    <td>
+                                        <%= new Date(paket.createdAt).toLocaleTimeString('sr-RS') %>
+                                    </td>
+                                    <td>
+                                        <%= paket.napomena %>
                                     </td>
                                     <td>
                                         <a class="delete" data-doc="<%= paket._id %>" href="#">
@@ -70,39 +82,100 @@
                 deleteButtons.forEach(button => {
                     button.addEventListener('click', (e) => {
                         e.preventDefault();
-                        const docId = button.getAttribute('data-doc');
-                        const endpoint = `/paket/${docId}`;
+                        const isConfirmed = confirm(`Obrisi pošiljku?`)
 
-                        fetch(endpoint, {
-                            method: 'DELETE',
-                        })
-                            .then(response => response.json())
-                            .then(data => window.location.href = data.redirect)
-                            .catch(err => console.log(err));
+                        if (isConfirmed) {
+                            const docId = button.getAttribute('data-doc');
+                            const endpoint = `/paket/${docId}`;
+
+                            fetch(endpoint, {
+                                method: 'DELETE',
+                            })
+                                .then(response => response.json())
+                                .then(data => window.location.href = data.redirect)
+                                .catch(err => console.log(err));
+                        }
                     });
                 });
 
-                // Sort rows by grad, klijent, adresa, and then by datum
-                rows.sort((a, b) => {
-                    const gradA = a.querySelectorAll('td')[1].textContent.toLowerCase();
-                    const gradB = b.querySelectorAll('td')[1].textContent.toLowerCase();
-                    const klijentA = a.querySelectorAll('td')[2].textContent.toLowerCase();
-                    const klijentB = b.querySelectorAll('td')[2].textContent.toLowerCase();
-                    const adresaA = a.querySelectorAll('td')[3].textContent.toLowerCase();
-                    const adresaB = b.querySelectorAll('td')[3].textContent.toLowerCase();
-                    const datumA = new Date(a.querySelectorAll('td')[7].textContent);
-                    const datumB = new Date(b.querySelectorAll('td')[7].textContent);
+                // Sort rows by  klijent, grad, adresa, and then by datum
+                // Reference to the table and its body
+                const table = document.querySelector('table');
+                const tableBody = table.querySelector('tbody');
 
-                    if (gradA !== gradB) {
-                        return gradA.localeCompare(gradB);
-                    } else if (klijentA !== klijentB) {
-                        return klijentA.localeCompare(klijentB);
-                    } else if (adresaA !== adresaB) {
-                        return adresaA.localeCompare(adresaB);
-                    } else {
-                        return datumA - datumB;
+                // Function to sort rows based on a specific column index
+                const sortTable = (columnIndex, dataType) => {
+                    const rows = Array.from(tableBody.querySelectorAll('tr'));
+
+                    // Sort the rows based on the content of the selected column
+                    rows.sort((rowA, rowB) => {
+                        const valueA = getDataValue(rowA.cells[columnIndex], dataType);
+                        const valueB = getDataValue(rowB.cells[columnIndex], dataType);
+
+                        if (dataType === 'string') {
+                            return valueA.localeCompare(valueB);
+                        } else if (dataType === 'number') {
+                            return valueA - valueB;
+                        } else if (dataType === 'date') {
+                            return new Date(valueA) - new Date(valueB);
+                        }
+                    });
+
+                    // Reorder the rows in the table based on the sorted rows
+                    rows.forEach((row, index) => {
+                        tableBody.appendChild(row);
+                        row.querySelector('td:first-child').textContent = index + 1;
+                    });
+                };
+
+                // Function to extract data value from a table cell based on its dataType
+                const getDataValue = (cell, dataType) => {
+                    const cellContent = cell.textContent.trim();
+
+                    if (dataType === 'number') {
+                        return parseFloat(cellContent);
+                    } else if (dataType === 'date') {
+                        return new Date(cellContent);
                     }
+
+                    return cellContent;
+                };
+
+                // Add click event listeners to the table headers for sorting
+                const headers = table.querySelectorAll('thead th');
+
+                headers.forEach((header, index) => {
+                    header.addEventListener('click', () => {
+                        let dataType = 'string'; // Default to string type
+
+                        // Determine the data type based on the header's class
+                        if (header.classList.contains('numeric')) {
+                            dataType = 'number';
+                        } else if (header.classList.contains('date')) {
+                            dataType = 'date';
+                        }
+
+                        // Toggle between ascending and descending order
+                        if (header.classList.contains('asc')) {
+                            header.classList.remove('asc');
+                            header.classList.add('desc');
+                        } else {
+                            header.classList.remove('desc');
+                            header.classList.add('asc');
+                        }
+
+                        // Remove sorting classes from other headers
+                        headers.forEach((otherHeader, otherIndex) => {
+                            if (otherIndex !== index) {
+                                otherHeader.classList.remove('asc', 'desc');
+                            }
+                        });
+
+                        // Sort the table based on the selected column
+                        sortTable(index, dataType);
+                    });
                 });
+
 
                 // Reorder the rows in the table based on the sorted rows
                 rows.forEach((row, index) => {
