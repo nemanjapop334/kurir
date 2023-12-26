@@ -37,6 +37,7 @@ const paket_create_post = (req, res) => {
         telefon: req.body.telefon,
         cena: req.body.cena,
         ptt: ptt,
+        napomena: req.body.napomena,
     };
     const paket = new Paket(combinedData);
     paket.save()
