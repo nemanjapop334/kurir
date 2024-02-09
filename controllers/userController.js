@@ -4,6 +4,7 @@ const validPassword = require('../lib/passwordUtils').validPassword;
 
 
 const user_login_post = (req, res) => {
+
     // Check for flash messages
     const error = req.flash('error')[0];
     // If the user is authenticated, redirect to the appropriate route

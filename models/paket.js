@@ -11,10 +11,6 @@ const paketSchema = new Schema({
         required: true
     },
     grad: String,
-    imeprezime: {
-        type: String,
-        required: true
-    },
     adresa: {
         type: String,
         required: true
