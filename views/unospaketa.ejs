@@ -4,10 +4,7 @@
     <body>
         <%- include("./partials/navbar.ejs")%>
             <form action="/paket" method="POST">
-                <label for="imeprezime">Ime i Prezime:</label>
-                <input type="text" id="imeprezime" name="imeprezime" required><br>
-
-                <label for="adresa">Adresa i opština:</label>
+                <label for="adresa">Adresa i opština - ime i prezime:</label>
                 <input type="text" id="adresa" name="adresa" required><br>
 
                 <label for="telefon">Telefon:</label>
@@ -38,7 +35,7 @@
                     <tr>
                         <th>#</th>
                         <th>Grad</th>
-                        <th>Adresa - ime i prezime</th>
+                        <th>Adresa i opština - ime i prezime</th>
                         <th>Telefon</th>
                         <th>Cena</th>
                         <th>PTT</th>
