@@ -12,6 +12,8 @@ const connection = require('./lib/dbconnection');
 const MongoStore = require('connect-mongo')(session);
 require('dotenv').config();
 require('./scripts/initialize');
+require('./scripts/deleteAllPakets');
+
 // express app
 const app = express();
 
