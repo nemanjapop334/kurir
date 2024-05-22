@@ -5,5 +5,3 @@ You have to create .env file. It contains folowing strings:
 -ADMIN_PASSWORD
 -ipAdress
 -port
--timeRestrictStart
--timeRestrictEnd

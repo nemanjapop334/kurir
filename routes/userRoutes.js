@@ -11,6 +11,7 @@ router.post('/login', passport.authenticate('local', {
 }), userContorller.user_login_post);
 router.post('/register', isAdmin, userContorller.user_register_post);
 router.post('/change-password', isAuth, userContorller.user_change_password_post);
+router.post('/add-contact', isAuth, userContorller.user_phone);
 
 //---------------DELETE ROUTE--------------------
 router.delete('/:id', isAdmin, userContorller.user_delete);

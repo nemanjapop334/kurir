@@ -15,6 +15,7 @@ const UserSchema = new mongoose.Schema({
     pttBG: Number,
     pttNS: Number,
     pttPA: Number,
+    phone: String
 });
 
 const User = connection.model('User', UserSchema);

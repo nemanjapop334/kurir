@@ -91,6 +91,22 @@ const user_change_password_post = (req, res) => {
         });
 };
 
+const user_phone = async (req, res) => {
+    const { phone } = req.body;
+    const userId = req.user.id;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send('User is not found!');
+        }
+        user.phone = phone;
+        await user.save();
+        res.redirect('/user/change-password');
+    } catch (error) {
+        res.status(500).send('Internal server error.');
+    }
+};
 
 const user_delete = (req, res) => {
     const id = req.params.id;
@@ -130,7 +146,7 @@ const user_login_get = (req, res) => {
 const user_change_password_get = (req, res) => {
     // Ensure that the error variable is defined (even if it's null)
     const error = req.flash('error')[0] || null;
-    res.render('changepassword', { title: 'Promeni šifru', error, userRole: req.user.role });
+    res.render('changepassword', { title: 'Moj profil', error, userRole: req.user.role, userPhone: req.user.phone });
 };
 
 module.exports = {
@@ -140,5 +156,6 @@ module.exports = {
     user_delete,
     user_register_get,
     user_login_get,
-    user_change_password_get
+    user_change_password_get,
+    user_phone
 }
