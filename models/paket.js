@@ -27,7 +27,7 @@ const paketSchema = new Schema({
     datum: {
         type: Date,
         index: true,
-        default: currentDate(),
+        default: currentDate,
     },
     napomena: String,
 }, { timestamps: true });
