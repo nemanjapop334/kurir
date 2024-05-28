@@ -5,3 +5,5 @@ You have to create .env file. It contains folowing strings:
 -ADMIN_PASSWORD
 -ipAdress
 -port
+
+Node.js version required is v14.17.6
