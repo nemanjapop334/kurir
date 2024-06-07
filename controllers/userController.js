@@ -20,75 +20,71 @@ const user_login_post = (req, res) => {
     }
 };
 
-const user_register_post = (req, res) => {
-    const saltHash = genPassword(req.body.password);
+const user_register_post = async (req, res) => {
+    try {
+        const saltHash = genPassword(req.body.password);
 
-    const salt = saltHash.salt;
-    const hash = saltHash.hash;
-    const role = req.body.role; // Get the selected role from the form
+        const salt = saltHash.salt;
+        const hash = saltHash.hash;
+        const role = req.body.role; // Get the selected role from the form
 
-    const newUser = new User({
-        username: req.body.username,
-        hash: hash,
-        salt: salt,
-        role: role, // Save the selected role to the 'role' field in your User model
-        pttBG: (role === 'klijent' ? req.body.pttBG : null), // Save the PTT value only for 'klijent'
-        pttNS: (role === 'klijent' ? req.body.pttNS : null),
-        pttPA: (role === 'klijent' ? req.body.pttPA : null)
-    });
-
-    newUser.save()
-        .then((user) => {
-            console.log(user);
-            res.redirect('/user/register');
-        })
-        .catch((error) => {
-            console.error(error);
-            // Handle the error appropriately, e.g., render an error page
-            res.status(500).send('Internal Server Error');
+        const user = await User.create({
+            username: req.body.username,
+            hash: hash,
+            salt: salt,
+            role: role, // Save the selected role to the 'role' field in your User model
+            pttBG: (role === 'klijent' ? req.body.pttBG : null), // Save the PTT value only for 'klijent'
+            pttNS: (role === 'klijent' ? req.body.pttNS : null),
+            pttPA: (role === 'klijent' ? req.body.pttPA : null)
         });
+        console.log(user);
+        res.redirect('/user/register');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
 };
 
-const user_change_password_post = (req, res) => {
-    const { currentPassword, newPassword, confirmPassword } = req.body;
+const user_change_password_post = async (req, res) => {
+    try {
+        const { currentPassword, newPassword, confirmPassword } = req.body;
 
-    // Initialize the error variable
-    let error = null;
+        // Initialize the error variable
+        let error = null;
 
-    // Retrieve the user from the database using the authenticated user's ID
-    User.findById(req.user.id)
-        .then((user) => {
-            // Validate current password
-            const isPasswordValid = validPassword(currentPassword, user.hash, user.salt);
+        // Fetch user from the database
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            throw new Error('Korisnik nije pronađen.');
+        }
 
-            if (isPasswordValid) {
-                // Validate new password and confirm password
-                if (newPassword === confirmPassword) {
-                    // Hash the new password before storing it in the database
-                    const { hash, salt } = genPassword(newPassword);
-                    // Update user's password in the database
-                    user.hash = hash;
-                    user.salt = salt;
-                    return user.save();
-                } else {
-                    // Handle incorrect new password error
-                    error = 'new-password';
-                    throw new Error('Nove šifre se ne poklapaju.');
-                }
-            } else {
-                // Handle incorrect current password error
-                error = 'current-password';
-                throw new Error('Netačan unos trenutne šifre.');
-            }
-        })
-        .then(() => {
-            // Password change was successful, redirect to login
-            res.redirect('/user/login');
-        })
-        .catch((error) => {
-            console.error('Error changing password:', error);
-            res.render('changepassword', { title: 'Promeni šifru', error: error.message, userRole: req.user.role });
-        });
+        // Validate current password
+        const isPasswordValid = validPassword(currentPassword, user.hash, user.salt);
+        if (!isPasswordValid) {
+            error = 'current-password';
+            throw new Error('Netačan unos trenutne šifre.');
+        }
+
+        // Validate new password and confirm password
+        if (newPassword !== confirmPassword) {
+            error = 'new-password';
+            throw new Error('Nove šifre se ne poklapaju.');
+        }
+
+        // Hash the new password before storing it in the database
+        const { hash, salt } = genPassword(newPassword);
+
+        // Update user's password in the database
+        user.hash = hash;
+        user.salt = salt;
+        await user.save();
+
+        // Redirect to login page after successful password change
+        res.redirect('/user/login');
+    } catch (error) {
+        console.error('Error changing password:', error);
+        res.render('changepassword', { title: 'Promeni šifru', error: error.message, userRole: req.user.role, userPhone: req.user.phone });
+    }
 };
 
 const user_phone = async (req, res) => {
@@ -108,25 +104,25 @@ const user_phone = async (req, res) => {
     }
 };
 
-const user_delete = (req, res) => {
-    const id = req.params.id;
-    User.findByIdAndDelete(id)
-        .then(result => {
-            res.json({ redirect: '/user/register' });
-        })
-        .catch(err => {
-            console.log(err);
-        });
+const user_delete = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const user = User.findByIdAndDelete(id);
+        res.json({ redirect: '/user/register' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
 };
 
-const user_register_get = (req, res) => {
-    User.find().sort({ createdAt: -1 })
-        .then(result => {
-            res.render('register', { users: result, title: 'Korisnici', userRole: req.user.role });
-        })
-        .catch(err => {
-            console.log(err);
-        });
+const user_register_get = async (req, res) => {
+    try {
+        const user = await User.find().sort({ createdAt: -1 })
+        res.render('register', { users: user, title: 'Korisnici', userRole: req.user.role });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
 };
 
 const user_login_get = (req, res) => {

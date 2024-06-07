@@ -1,67 +1,62 @@
 const Paket = require('../models/paket');
 
-const paket_index = (req, res) => {
-    const info = req.flash('info')[0] || null;
-    const klijent = req.user.username;
-    Paket.find({ klijent: klijent }).sort({ createdAt: -1 })
-        .then(result => {
-            res.render('unospaketa', { pakets: result, title: `${klijent} UNOS PAKETA`, userRole: req.user.role, info, klijent });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).send("Internal Server Error");
-        });
-};
+const paket_index = async (req, res) => {
+    try {
+        const info = req.flash('info')[0] || null;
+        const klijent = req.user.username;
 
-const paket_admin = (req, res) => {
-    Paket.find()
-        .then(result => {
-            res.render('adminlista', { pakets: result, title: 'Lista pošiljaka', userRole: req.user.role });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).send("Internal Server Error");
-        });
-};
-
-
-const paket_create_post = (req, res) => {
-
-    const ptt = req.user[`ptt${req.body.grad}`];
-
-    const combinedData = {
-        klijent: req.user.username,
-        grad: req.body.grad,
-        adresa: req.body.adresa,
-        telefon: req.body.telefon,
-        cena: req.body.cena,
-        ptt: ptt,
-        napomena: req.body.napomena,
+        const paket = await Paket.find({ klijent: klijent }).sort({ createdAt: -1 });
+        res.render('unospaketa', { pakets: paket, title: `${klijent} UNOS PAKETA`, userRole: req.user.role, info, klijent });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
     };
-    const paket = new Paket(combinedData);
-    paket.save()
-        .then(result => {
-            res.redirect(303, '/paket');
-        })
-        .catch(err => {
-            console.log(err);
-        });
+};
+const paket_admin = async (req, res) => {
+    try {
+        const paket = await Paket.find();
+        res.render('adminlista', { pakets: paket, title: 'Lista pošiljaka', userRole: req.user.role });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
 };
 
-const paket_delete = (req, res) => {
-    const id = req.params.id;
-    Paket.findByIdAndDelete(id)
-        .then(result => {
-            res.json({ redirect: '/paket/admin' });
-        })
-        .catch(err => {
-            console.log(err);
-        });
+
+const paket_create_post = async (req, res) => {
+    try {
+        const ptt = req.user[`ptt${req.body.grad}`];
+        const combinedData = {
+            klijent: req.user.username,
+            grad: req.body.grad,
+            adresa: req.body.adresa,
+            telefon: req.body.telefon,
+            cena: req.body.cena,
+            ptt: ptt,
+            napomena: req.body.napomena,
+        };
+        const paket = await Paket.create(combinedData);
+        res.redirect(303, '/paket');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+const paket_delete = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const paket = await Paket.findByIdAndDelete(id);
+        res.json({ redirect: '/paket/admin' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
 };
 
 const paket_delete_all = async (req, res) => {
     try {
-        const result = await Paket.deleteMany({});
+        const paket = await Paket.deleteMany({});
         console.log(`Deleted ${result.deletedCount} documents from the "pakets" collection.`);
         res.redirect('/paket/admin');
     } catch (err) {
