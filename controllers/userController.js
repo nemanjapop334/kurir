@@ -107,7 +107,10 @@ const user_phone = async (req, res) => {
 const user_delete = async (req, res) => {
     try {
         const id = req.params.id;
-        const user = User.findByIdAndDelete(id);
+        const user = await User.findByIdAndDelete(id);
+        if (!user) {
+            return res.status(404).send("User not found");
+        }
         res.json({ redirect: '/user/register' });
     } catch (err) {
         console.error(err);
