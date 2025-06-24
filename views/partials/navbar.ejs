@@ -2,7 +2,7 @@
     <div class="navbar">
         <a href="/user/change-password">Moj profil</a>
         <a href="/paket/export-to-excel">Download Excel</a>
-        <a href="/paket/downloadpdf">Download PDF</a>
+        <a href="<%= isSpecialClient ? '/paket/downloadpdf2' : '/paket/downloadpdf' %>">Download PDF</a>
         <a href="/paket">Unos paketa</a>
         <a href="/user/logout">Logout</a>
     </div>

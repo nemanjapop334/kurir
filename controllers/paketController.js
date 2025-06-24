@@ -2,11 +2,14 @@ const Paket = require('../models/paket');
 
 const paket_index = async (req, res) => {
     try {
+        const specialClients = process.env.SPECIAL_CLIENTS?.split(',') || [];
+        const isSpecialClient = specialClients.includes(req.user.username);
+
         const info = req.flash('info')[0] || null;
         const klijent = req.user.username;
 
         const paket = await Paket.find({ klijent: klijent }).sort({ createdAt: -1 });
-        res.render('unospaketa', { pakets: paket, title: `${klijent} UNOS PAKETA`, userRole: req.user.role, info, klijent });
+        res.render('unospaketa', { pakets: paket, title: `${klijent} UNOS PAKETA`, userRole: req.user.role, info, klijent, isSpecialClient });
     } catch (err) {
         console.error(err);
         res.status(500).send("Internal Server Error");
