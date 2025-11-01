@@ -83,7 +83,10 @@ const user_change_password_post = async (req, res) => {
         res.redirect('/user/login');
     } catch (error) {
         console.error('Error changing password:', error);
-        res.render('changepassword', { title: 'Promeni šifru', error: error.message, userRole: req.user.role, userPhone: req.user.phone });
+        const specialClients = process.env.SPECIAL_CLIENTS?.split(',') || [];
+        const isSpecialClient = specialClients.includes(req.user?.username);
+
+        res.render('changepassword', { title: 'Promeni šifru', error: error.message, userRole: req.user.role, userPhone: req.user.phone, isSpecialClient });
     }
 };
 
@@ -144,10 +147,11 @@ const user_login_get = (req, res) => {
 
 const user_change_password_get = (req, res) => {
     // Ensure that the error variable is defined (even if it's null)
+    const error = req.flash('error')[0] || null;
+
     const specialClients = process.env.SPECIAL_CLIENTS?.split(',') || [];
     const isSpecialClient = specialClients.includes(req.user.username);
 
-    const error = req.flash('error')[0] || null;
     res.render('changepassword', { title: 'Moj profil', error, userRole: req.user.role, userPhone: req.user.phone, isSpecialClient });
 };
 
