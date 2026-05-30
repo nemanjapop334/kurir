@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const genPassword = require('../lib/passwordUtils').genPassword;
 const validPassword = require('../lib/passwordUtils').validPassword;
+const { getPdfClientViewData } = require('../lib/pdfClient');
 
 
 const user_login_post = (req, res) => {
@@ -83,10 +84,14 @@ const user_change_password_post = async (req, res) => {
         res.redirect('/user/login');
     } catch (error) {
         console.error('Error changing password:', error);
-        const specialClients = process.env.SPECIAL_CLIENTS?.split(',') || [];
-        const isSpecialClient = specialClients.includes(req.user?.username);
 
-        res.render('changepassword', { title: 'Promeni šifru', error: error.message, userRole: req.user.role, userPhone: req.user.phone, isSpecialClient });
+        res.render('changepassword', {
+            title: 'Promeni šifru',
+            error: error.message,
+            userRole: req.user.role,
+            userPhone: req.user.phone,
+            ...getPdfClientViewData(req.user?.username),
+        });
     }
 };
 
@@ -149,10 +154,13 @@ const user_change_password_get = (req, res) => {
     // Ensure that the error variable is defined (even if it's null)
     const error = req.flash('error')[0] || null;
 
-    const specialClients = process.env.SPECIAL_CLIENTS?.split(',') || [];
-    const isSpecialClient = specialClients.includes(req.user.username);
-
-    res.render('changepassword', { title: 'Moj profil', error, userRole: req.user.role, userPhone: req.user.phone, isSpecialClient });
+    res.render('changepassword', {
+        title: 'Moj profil',
+        error,
+        userRole: req.user.role,
+        userPhone: req.user.phone,
+        ...getPdfClientViewData(req.user.username),
+    });
 };
 
 module.exports = {
