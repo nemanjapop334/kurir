@@ -5,7 +5,10 @@
             <div class="page-container">
                 <div class="register-container">
                     <h2>Registruj korisnika</h2>
-                    <form action="/user/register" method="post">
+                    <% if (typeof error !== 'undefined' && error) { %>
+                        <p class="error-message"><%= error %></p>
+                    <% } %>
+                    <form action="/user/register" method="post" id="user-form">
                         <div class="form-group">
                             <label for="username">Korisničko ime:</label>
                             <input type="text" id="username" name="username" required>
@@ -74,7 +77,17 @@
                                         <td>
                                             <%= user.pttPA %>
                                         </td>
-                                        <td>
+                                        <td class="row-actions">
+                                            <a class="edit"
+                                                href="#"
+                                                data-doc="<%= user._id %>"
+                                                data-username="<%= user.username %>"
+                                                data-role="<%= user.role %>"
+                                                data-pttbg="<%= user.pttBG %>"
+                                                data-pttns="<%= user.pttNS %>"
+                                                data-pttpa="<%= user.pttPA %>">
+                                                <img src="/public/edit.svg" alt="Izmeni korisnika">
+                                            </a>
                                             <a class="delete" data-doc="<%= user._id %>" href="#">
                                                 <img src="/public/trashcan.svg" alt="Trashcan Icon"></a>
                                         </td>
@@ -83,11 +96,64 @@
                                         <% }); %>
                                             <% } else { %>
                                                 <tr>
-                                                    <td colspan="5">Nema klijenata za prikaz!</td>
+                                                    <td colspan="6">Nema klijenata za prikaz!</td>
                                                 </tr>
                                                 <% } %>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="modal-overlay" id="edit-user-modal" hidden>
+                <div class="modal" role="dialog" aria-modal="true" aria-labelledby="edit-form-title">
+                    <div class="modal-header">
+                        <h2 id="edit-form-title">Izmeni korisnika</h2>
+                        <button type="button" class="modal-close" id="close-edit-modal" aria-label="Zatvori">&times;</button>
+                    </div>
+                    <% if (typeof editError !== 'undefined' && editError) { %>
+                        <p class="error-message"><%= editError %></p>
+                    <% } %>
+                    <form method="post" id="edit-user-form">
+                        <div class="form-group">
+                            <label for="edit-username">Korisničko ime:</label>
+                            <input type="text" id="edit-username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-password">Šifra:</label>
+                            <input type="password" id="edit-password" name="password">
+                            <p class="field-hint">Ostavi prazno ako ne želiš da menjaš šifru.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-confirm-password">Potvrdi šifru:</label>
+                            <input type="password" id="edit-confirm-password" name="confirm-password">
+                            <p id="edit-password-match-message" class="error-message"></p>
+                        </div>
+                        <div class="form-group" id="edit-ptt-field">
+                            <div id="ptt-inner">
+                                <label for="edit-pttBG">PTT BG:</label>
+                                <input type="number" id="edit-pttBG" name="pttBG" required>
+                            </div>
+                            <div id="ptt-inner">
+                                <label for="edit-pttNS">PTT NS:</label>
+                                <input type="number" id="edit-pttNS" name="pttNS" required>
+                            </div>
+                            <div id="ptt-inner">
+                                <label for="edit-pttPA">PTT PA:</label>
+                                <input type="number" id="edit-pttPA" name="pttPA" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-role">Role</label>
+                            <select id="edit-role" name="role">
+                                <option value="klijent">Klijent</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="submit" class="btn">Sačuvaj izmene</button>
+                            <button type="button" class="btn btn-cancel" id="cancel-edit-btn">Otkaži</button>
+                        </div>
+                    </form>
+                </div>
             </div>
 
 
@@ -97,7 +163,7 @@
                 const passwordInput = document.getElementById('password');
                 const confirmInput = document.getElementById('confirm-password');
                 const message = document.getElementById('password-match-message');
-                const form = document.querySelector('form');
+                const form = document.getElementById('user-form');
 
                 function validatePassword() {
                     if (passwordInput.value !== confirmInput.value) {
@@ -166,6 +232,123 @@
                 togglePTTField();
 
                 roleSelect.addEventListener('change', togglePTTField);
+
+                const editModal = document.getElementById('edit-user-modal');
+                const editForm = document.getElementById('edit-user-form');
+                const editUsernameInput = document.getElementById('edit-username');
+                const editPasswordInput = document.getElementById('edit-password');
+                const editConfirmInput = document.getElementById('edit-confirm-password');
+                const editPasswordMessage = document.getElementById('edit-password-match-message');
+                const editRoleSelect = document.getElementById('edit-role');
+                const editPttField = document.getElementById('edit-ptt-field');
+                const editPttInputs = Array.from(document.querySelectorAll('#edit-ptt-field input'));
+                const editPttBGInput = document.getElementById('edit-pttBG');
+                const editPttNSInput = document.getElementById('edit-pttNS');
+                const editPttPAInput = document.getElementById('edit-pttPA');
+
+                function toggleEditPTTField() {
+                    const selectedRole = editRoleSelect.value;
+
+                    if (selectedRole === 'admin') {
+                        editPttField.style.display = 'none';
+                        editPttInputs.forEach(input => {
+                            input.required = false;
+                        });
+                    } else {
+                        editPttField.style.display = 'block';
+                        editPttInputs.forEach(input => {
+                            input.required = true;
+                        });
+                    }
+                }
+
+                function validateEditPassword() {
+                    if (!editPasswordInput.value && !editConfirmInput.value) {
+                        editPasswordMessage.textContent = '';
+                        return true;
+                    }
+
+                    if (editPasswordInput.value !== editConfirmInput.value) {
+                        editPasswordMessage.textContent = 'Šifre se ne poklapaju.';
+                        return false;
+                    }
+
+                    editPasswordMessage.textContent = '';
+                    return true;
+                }
+
+                function openEditModal(user) {
+                    editForm.action = `/user/${user.id}`;
+                    editUsernameInput.value = user.username || '';
+                    editRoleSelect.value = user.role || 'klijent';
+                    editPttBGInput.value = user.pttBG || '';
+                    editPttNSInput.value = user.pttNS || '';
+                    editPttPAInput.value = user.pttPA || '';
+                    editPasswordInput.value = '';
+                    editConfirmInput.value = '';
+                    editPasswordMessage.textContent = '';
+                    toggleEditPTTField();
+                    editModal.hidden = false;
+                    document.body.classList.add('modal-open');
+                    editUsernameInput.focus();
+                }
+
+                function closeEditModal() {
+                    editModal.hidden = true;
+                    document.body.classList.remove('modal-open');
+                    editForm.reset();
+                    editPasswordMessage.textContent = '';
+                }
+
+                document.querySelectorAll('a.edit').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        openEditModal({
+                            id: button.getAttribute('data-doc'),
+                            username: button.getAttribute('data-username') || '',
+                            role: button.getAttribute('data-role') || 'klijent',
+                            pttBG: button.getAttribute('data-pttbg'),
+                            pttNS: button.getAttribute('data-pttns'),
+                            pttPA: button.getAttribute('data-pttpa')
+                        });
+                    });
+                });
+
+                document.getElementById('close-edit-modal').addEventListener('click', closeEditModal);
+                document.getElementById('cancel-edit-btn').addEventListener('click', closeEditModal);
+
+                editModal.addEventListener('click', (e) => {
+                    if (e.target === editModal) {
+                        closeEditModal();
+                    }
+                });
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && !editModal.hidden) {
+                        closeEditModal();
+                    }
+                });
+
+                editRoleSelect.addEventListener('change', toggleEditPTTField);
+                editPasswordInput.addEventListener('input', validateEditPassword);
+                editConfirmInput.addEventListener('input', validateEditPassword);
+
+                editForm.addEventListener('submit', (event) => {
+                    if (!validateEditPassword()) {
+                        event.preventDefault();
+                    }
+                });
+
+                <% if (typeof editingUser !== 'undefined' && editingUser) { %>
+                openEditModal(<%- JSON.stringify({
+                    id: String(editingUser.id),
+                    username: editingUser.username,
+                    role: editingUser.role,
+                    pttBG: editingUser.pttBG,
+                    pttNS: editingUser.pttNS,
+                    pttPA: editingUser.pttPA
+                }) %>);
+                <% } %>
             </script>
 
     </body>

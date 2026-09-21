@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Paket = require('../models/paket');
 const genPassword = require('../lib/passwordUtils').genPassword;
 const validPassword = require('../lib/passwordUtils').validPassword;
 const { getPdfClientViewData } = require('../lib/pdfClient');
@@ -126,10 +127,88 @@ const user_delete = async (req, res) => {
     }
 };
 
+const renderRegisterPage = async (res, req, extra = {}) => {
+    const users = await User.find().sort({ createdAt: -1 });
+    res.render('register', {
+        users,
+        title: 'Korisnici',
+        userRole: req.user.role,
+        error: null,
+        editError: null,
+        editingUser: null,
+        ...extra
+    });
+};
+
+const user_update_post = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const user = await User.findById(id);
+
+        if (!user) {
+            return res.status(404).send("User not found");
+        }
+
+        const username = (req.body.username || '').trim();
+        const role = req.body.role;
+        const password = req.body.password;
+        const confirmPassword = req.body['confirm-password'];
+        const editingUser = {
+            id,
+            username,
+            role,
+            pttBG: req.body.pttBG || '',
+            pttNS: req.body.pttNS || '',
+            pttPA: req.body.pttPA || ''
+        };
+
+        if (!username) {
+            return renderRegisterPage(res, req, { editError: 'Korisničko ime je obavezno.', editingUser });
+        }
+
+        if (role !== 'admin' && role !== 'klijent') {
+            return renderRegisterPage(res, req, { editError: 'Nevažeća uloga korisnika.', editingUser });
+        }
+
+        const existingUser = await User.findOne({ username, _id: { $ne: id } });
+        if (existingUser) {
+            return renderRegisterPage(res, req, { editError: 'Korisničko ime već postoji.', editingUser });
+        }
+
+        if (password || confirmPassword) {
+            if (password !== confirmPassword) {
+                return renderRegisterPage(res, req, { editError: 'Šifre se ne poklapaju.', editingUser });
+            }
+
+            const { hash, salt } = genPassword(password);
+            user.hash = hash;
+            user.salt = salt;
+        }
+
+        const oldUsername = user.username;
+
+        user.username = username;
+        user.role = role;
+        user.pttBG = role === 'klijent' ? req.body.pttBG : null;
+        user.pttNS = role === 'klijent' ? req.body.pttNS : null;
+        user.pttPA = role === 'klijent' ? req.body.pttPA : null;
+
+        await user.save();
+
+        if (oldUsername !== username) {
+            await Paket.updateMany({ klijent: oldUsername }, { klijent: username });
+        }
+
+        res.redirect('/user/register');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
 const user_register_get = async (req, res) => {
     try {
-        const user = await User.find().sort({ createdAt: -1 })
-        res.render('register', { users: user, title: 'Korisnici', userRole: req.user.role });
+        await renderRegisterPage(res, req);
     } catch (err) {
         console.error(err);
         res.status(500).send("Internal Server Error");
@@ -168,6 +247,7 @@ module.exports = {
     user_register_post,
     user_change_password_post,
     user_delete,
+    user_update_post,
     user_register_get,
     user_login_get,
     user_change_password_get,
